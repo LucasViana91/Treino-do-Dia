@@ -1,0 +1,1548 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0D0E10">
+<title>Ficha do Dia · Jornada Fit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=Big+Shoulders+Display:wght@700;800;900&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Ficha do Dia: um formulário rápido, uma pergunta por tela, que termina numa ficha de treino.
+   Mesma identidade do Jornada Fit: ferro escuro, texto cor de giz, brasa como energia e as cores das anilhas marcando os grupos musculares.
+   Funciona sem internet: se as fontes não carregarem, entram fontes condensadas do próprio aparelho. */
+:root {
+  color-scheme: dark;
+  --ferro: #0D0E10;
+  --placa: #16181B;
+  --placa-2: #1F2226;
+  --linha: #2B2F35;
+  --giz: #EDEBE6;
+  --cinza: #9399A1;
+  --cinza-2: #646A72;
+  --brasa: #FF5B22;
+  --brasa-2: #FF8A57;
+  --sobre-brasa: #140804;
+  --vermelha: #E5383B;
+  --azul: #2F80ED;
+  --amarela: #F2C230;
+  --verde: #2FBF71;
+  --branca: #E9E7E1;
+  --sombra: rgba(0, 0, 0, 0.5);
+  --f-display: "Big Shoulders Display", "Bahnschrift Condensed", "Roboto Condensed", "sans-serif-condensed", "Arial Narrow", Impact, sans-serif;
+  --f-texto: "Archivo", "Segoe UI", Roboto, "Helvetica Neue", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Consolas, "Roboto Mono", monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; }
+body {
+  background: var(--ferro);
+  color: var(--giz);
+  font-family: var(--f-texto);
+  font-size: 15px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-text-size-adjust: 100%;
+}
+button, input { font: inherit; color: inherit; }
+button { cursor: pointer; border: 0; background: none; padding: 0; }
+:focus-visible { outline: 2px solid var(--brasa); outline-offset: 2px; border-radius: 8px; }
+[hidden] { display: none !important; }
+svg.i { width: 20px; height: 20px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+.pagina {
+  max-width: 560px;
+  margin: 0 auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-top: calc(env(safe-area-inset-top, 0px) + 14px);
+  padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 28px);
+  padding-left: max(18px, env(safe-area-inset-left, 0px));
+  padding-right: max(18px, env(safe-area-inset-right, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Tipografia */
+.display { font-family: var(--f-display); font-weight: 800; text-transform: uppercase; letter-spacing: 0.01em; line-height: 0.95; text-wrap: balance; margin: 0; }
+.rotulo { font-family: var(--f-mono); font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--cinza); }
+.suave { color: var(--cinza); margin: 0; }
+.pequeno { font-size: 13px; color: var(--cinza); line-height: 1.4; }
+.num { font-family: var(--f-display); font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
+.brasa { color: var(--brasa); }
+
+/* Topo */
+.topo { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.marca { display: flex; align-items: center; gap: 9px; font-family: var(--f-display); font-weight: 900; font-size: 19px; letter-spacing: 0.05em; text-transform: uppercase; }
+.marca-sinal { width: 28px; height: 28px; border-radius: 8px; background: var(--brasa); display: grid; place-items: center; color: var(--sobre-brasa); }
+.marca-sinal svg.i { width: 17px; height: 17px; stroke-width: 2.6; }
+.data { font-family: var(--f-mono); font-size: 12px; color: var(--cinza); letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* Botões */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 54px; padding: 0 20px; border-radius: 15px; font-weight: 700; font-size: 16px; transition: transform .12s, background .2s, opacity .2s; user-select: none; -webkit-user-select: none; }
+.btn:active { transform: scale(.98); }
+.btn-primario { background: var(--brasa); color: var(--sobre-brasa); }
+.btn-primario:hover { background: var(--brasa-2); }
+.btn-secundario { background: var(--placa-2); border: 1px solid var(--linha); }
+.btn-fantasma { color: var(--cinza); min-height: 46px; }
+.btn-bloco { width: 100%; }
+.btn[disabled] { opacity: .35; pointer-events: none; }
+.btn-icone { width: 46px; height: 46px; border-radius: 13px; display: grid; place-items: center; background: var(--placa-2); border: 1px solid var(--linha); flex: none; }
+.acoes-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+/* Abertura */
+.abertura { flex: 1; display: flex; flex-direction: column; gap: 22px; }
+.abertura-titulo { font-size: clamp(54px, 15vw, 84px); line-height: .86; }
+.abertura-titulo em { font-style: normal; color: var(--brasa); }
+.anilhas { display: flex; align-items: center; margin-top: 6px; }
+.anilhas svg + svg { margin-left: -14px; }
+.passos-lista { display: flex; flex-direction: column; }
+.passo-item { display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: center; padding: 13px 0; border-top: 1px solid var(--linha); }
+.passo-num { font-family: var(--f-display); font-weight: 800; font-size: 26px; color: var(--brasa); }
+.resumo-semana { display: flex; align-items: center; gap: 12px; padding: 14px 16px; background: var(--placa); border: 1px solid var(--linha); border-radius: 16px; }
+
+/* Perguntas */
+.progresso { display: flex; align-items: center; gap: 12px; }
+.barra { flex: 1; height: 6px; border-radius: 99px; background: var(--placa-2); overflow: hidden; }
+.barra > span { display: block; height: 100%; background: var(--brasa); border-radius: 99px; transition: width .4s cubic-bezier(.2,.8,.2,1); }
+.pergunta { display: flex; flex-direction: column; gap: 18px; flex: 1; animation: entrar .35s cubic-bezier(.2,.8,.2,1); }
+.pergunta-titulo { font-size: clamp(34px, 9vw, 46px); }
+@keyframes entrar { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.opcoes { display: flex; flex-direction: column; gap: 10px; }
+.opcao { display: flex; align-items: center; gap: 14px; width: 100%; padding: 16px; border-radius: 16px; border: 1.5px solid var(--linha); background: var(--placa); text-align: left; transition: border-color .15s, background .15s; }
+.opcao:hover { border-color: var(--cinza-2); }
+.opcao[aria-pressed="true"] { border-color: var(--brasa); background: color-mix(in srgb, var(--brasa) 10%, var(--placa)); }
+.opcao-marca { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--cinza-2); flex: none; display: grid; place-items: center; transition: background .15s, border-color .15s; }
+.opcao.multi .opcao-marca { border-radius: 7px; }
+.opcao[aria-pressed="true"] .opcao-marca { background: var(--brasa); border-color: var(--brasa); color: var(--sobre-brasa); }
+.opcao-marca svg.i { width: 14px; height: 14px; stroke-width: 3.2; opacity: 0; }
+.opcao[aria-pressed="true"] .opcao-marca svg.i { opacity: 1; }
+.opcao-titulo { font-weight: 700; font-size: 16px; display: block; }
+.grade-opcoes { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); gap: 10px; }
+.grade-opcoes .opcao { flex-direction: column; justify-content: center; gap: 2px; padding: 18px 8px; text-align: center; }
+.grade-opcoes .opcao .num { font-size: 34px; }
+.grade-opcoes .opcao-marca { display: none; }
+.grupo-cor { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+.entrada { display: flex; align-items: center; background: var(--placa); border: 1.5px solid var(--linha); border-radius: 16px; padding: 0 16px; }
+.entrada:focus-within { border-color: var(--brasa); }
+.entrada input { flex: 1; min-width: 0; background: transparent; border: 0; outline: none; font-size: 20px; font-weight: 600; padding: 16px 0; }
+.nota-historico { display: flex; gap: 10px; align-items: flex-start; padding: 12px 14px; border-radius: 12px; background: color-mix(in srgb, var(--azul) 13%, var(--placa)); border: 1px solid color-mix(in srgb, var(--azul) 38%, var(--linha)); font-size: 13.5px; }
+.nota-historico svg.i { color: var(--azul); width: 18px; height: 18px; margin-top: 1px; }
+.rodape { position: sticky; bottom: 0; margin-top: auto; padding-top: 14px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 4px); background: linear-gradient(to top, var(--ferro) 72%, transparent); display: flex; gap: 10px; }
+
+/* Gerando */
+.gerando { flex: 1; display: grid; place-items: center; text-align: center; }
+.gerando svg.anilha { animation: girar 1.1s cubic-bezier(.5,0,.3,1) infinite; }
+@keyframes girar { to { transform: rotate(360deg); } }
+
+/* Ficha */
+.ficha-cab { display: flex; flex-direction: column; gap: 10px; padding: 20px 18px; border-radius: 20px; border: 1px solid var(--linha);
+  background: radial-gradient(120% 100% at 100% 0%, color-mix(in srgb, var(--brasa) 18%, transparent), transparent 58%), var(--placa); position: relative; overflow: hidden; }
+.ficha-cab::after { content: ""; position: absolute; right: -70px; top: -70px; width: 200px; height: 200px; border-radius: 50%; border: 24px solid color-mix(in srgb, var(--brasa) 10%, transparent); pointer-events: none; }
+.ficha-titulo { font-size: clamp(46px, 13vw, 68px); }
+.metricas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 4px; }
+.metrica { background: var(--placa-2); border-radius: 12px; padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.metrica .num { font-size: 26px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { display: inline-flex; align-items: center; gap: 6px; font-family: var(--f-mono); font-size: 11px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 5px 8px; border-radius: 6px; background: var(--placa-2); }
+.cartao { background: var(--placa); border: 1px solid var(--linha); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.porque li { margin: 0; padding-left: 4px; }
+.porque ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+.porque li::marker { color: var(--brasa); }
+.bloco { display: flex; gap: 12px; align-items: flex-start; padding: 13px 15px; border-radius: 14px; background: var(--placa); border: 1px solid var(--linha); font-size: 14px; }
+.bloco svg.i { color: var(--brasa); margin-top: 1px; }
+.lista { display: flex; flex-direction: column; }
+.ex { display: grid; grid-template-columns: 132px 1fr; gap: 12px 14px; padding: 16px 0; border-top: 1px solid var(--linha); align-items: start; }
+.ex.grande { grid-template-columns: 1fr; }
+.ex-info { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.ex-corpo { grid-column: 1 / -1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.ex-corpo .series { margin-top: 0; }
+.ilu-caixa { position: relative; width: 100%; aspect-ratio: 120 / 96; max-width: 100%; border-radius: 14px; background:
+  radial-gradient(90% 70% at 50% 100%, color-mix(in srgb, var(--brasa) 7%, transparent), transparent 70%), var(--placa-2); border: 1px solid var(--linha); overflow: hidden; display: block; padding: 0; }
+.ex.grande .ilu-caixa { max-width: 420px; justify-self: center; }
+.ilu-caixa svg { width: 100%; height: 100%; display: block; }
+.ilu-caixa .ex-num { position: absolute; top: 6px; left: 8px; font-size: 18px; color: var(--cinza); }
+.ex.feito .ilu-caixa { border-color: color-mix(in srgb, var(--verde) 60%, var(--linha)); }
+.ilu-lupa { position: absolute; right: 6px; bottom: 6px; width: 22px; height: 22px; border-radius: 7px; background: color-mix(in srgb, var(--ferro) 70%, transparent); display: grid; place-items: center; color: var(--cinza); }
+.ilu-lupa svg.i { width: 13px; height: 13px; }
+.legenda { font-size: 12.5px; line-height: 1.35; color: var(--giz); opacity: .82; display: flex; gap: 6px; align-items: flex-start; }
+.legenda svg.i { width: 14px; height: 14px; color: var(--brasa); margin-top: 1px; }
+@media (max-width: 359px) { .ex { grid-template-columns: 1fr; } .ilu-caixa { max-width: 240px; } }
+.ex:first-child { border-top: 0; padding-top: 4px; }
+.ex-num { font-family: var(--f-display); font-weight: 800; font-size: 26px; line-height: 1; color: var(--cinza-2); }
+.ex.feito .ex-num { color: var(--verde); }
+.ex-nome { font-weight: 700; font-size: 16.5px; line-height: 1.3; }
+.prescricao { font-family: var(--f-mono); font-size: 13.5px; font-weight: 600; color: var(--brasa); }
+.tecnica { font-size: 13px; color: var(--amarela); }
+.series { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+.serie { min-width: 46px; height: 42px; padding: 0 10px; border-radius: 12px; border: 1.5px solid var(--linha); background: var(--placa-2); font-family: var(--f-display); font-weight: 800; font-size: 18px; display: inline-flex; align-items: center; justify-content: center; }
+.serie[aria-pressed="true"] { background: var(--brasa); border-color: var(--brasa); color: var(--sobre-brasa); }
+.serie svg.i { width: 16px; height: 16px; stroke-width: 3; }
+.ex-acoes { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 2px; }
+.link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--brasa); padding: 6px 0; }
+.link svg.i { width: 16px; height: 16px; }
+.focos { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+.foco { flex: none; padding: 10px 14px; border-radius: 999px; border: 1px solid var(--linha); background: var(--placa); font-weight: 600; font-size: 14px; white-space: nowrap; }
+.foco[aria-pressed="true"] { background: var(--giz); color: var(--ferro); border-color: var(--giz); }
+.foco .recup { font-size: 11px; color: var(--cinza); font-weight: 500; }
+.descanso { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; background: color-mix(in srgb, var(--ferro) 94%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-top: 1px solid var(--linha);
+  padding-top: 12px; padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 12px); padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); }
+.descanso > div { max-width: 560px; margin: 0 auto; display: flex; align-items: center; gap: 12px; }
+.descanso .num { font-size: 34px; min-width: 70px; }
+.descanso-barra { height: 4px; border-radius: 99px; background: var(--placa-2); overflow: hidden; max-width: 560px; margin: 10px auto 0; }
+.descanso-barra span { display: block; height: 100%; background: var(--brasa); }
+.toast { position: fixed; left: 50%; top: calc(env(safe-area-inset-top, 0px) + 14px); transform: translate(-50%, -18px); z-index: 50; opacity: 0; pointer-events: none;
+  background: var(--giz); color: var(--ferro); font-weight: 700; padding: 12px 18px; border-radius: 14px; box-shadow: 0 12px 30px var(--sombra); width: max-content; max-width: calc(100% - 36px);
+  display: flex; gap: 10px; align-items: center; transition: opacity .25s, transform .25s; }
+.toast.visivel { opacity: 1; transform: translate(-50%, 0); }
+.toast svg.i { color: var(--brasa); }
+.aviso { font-size: 12.5px; color: var(--cinza); text-align: center; line-height: 1.45; margin: 0; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+@media (min-width: 720px) { .pagina { padding-top: 40px; } }
+</style>
+</head>
+<body>
+<div class="pagina" id="raiz"></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* =====================================================================
+   Ilustrações animadas dos exercícios
+   Um boneco de vista lateral (ou frontal) vai da posição inicial (A) à final (B) em loop.
+   Cada pose é descrita por pontos-chave (quadril, ombro, mão, pé); cotovelos e joelhos
+   são calculados por cinemática inversa, então os membros mantêm o comprimento.
+   Área de desenho: 120 x 96, chão em y = 92, boneco olhando para a direita.
+   ===================================================================== */
+const ILU = (() => {
+  const L = { tronco: 26, coxa: 19, canela: 19, braco: 14, antebraco: 13 };
+  const CHAO = 92;
+  const rad = (g) => (g * Math.PI) / 180;
+  const soma = (a, b) => [a[0] + b[0], a[1] + b[1]];
+  const lerp = (a, b, t) => a + (b - a) * t;
+  const lerpP = (a, b, t) => [lerp(a[0], b[0], t), lerp(a[1], b[1], t)];
+  const espelho = (p) => [120 - p[0], p[1]];
+  const f1 = (n) => Math.round(n * 10) / 10;
+
+  function ik(raiz, alvo, l1, l2, lado) {
+    const dx = alvo[0] - raiz[0], dy = alvo[1] - raiz[1];
+    const d = Math.hypot(dx, dy) || 0.001;
+    const max = l1 + l2 - 0.01, min = Math.abs(l1 - l2) + 0.01;
+    const dd = Math.max(min, Math.min(max, d));
+    const base = Math.atan2(dy, dx);
+    const cosA = (l1 * l1 + dd * dd - l2 * l2) / (2 * l1 * dd);
+    const ang = base + lado * Math.acos(Math.max(-1, Math.min(1, cosA)));
+    const junta = [raiz[0] + l1 * Math.cos(ang), raiz[1] + l1 * Math.sin(ang)];
+    const fim = d > max ? [raiz[0] + (dx / d) * (l1 + l2 - 0.01), raiz[1] + (dy / d) * (l1 + l2 - 0.01)] : alvo;
+    return [junta, fim];
+  }
+
+  // Transforma a descrição de uma pose em pontos do corpo
+  function resolver(pz, cfg) {
+    const q = pz.q;
+    const o = pz.o || [q[0] + L.tronco * Math.cos(rad(pz.t)), q[1] - L.tronco * Math.sin(rad(pz.t))];
+    const dx = o[0] - q[0], dy = o[1] - q[1], n = Math.hypot(dx, dy) || 1;
+    const cab = pz.h || [o[0] + (dx / n) * 9, o[1] + (dy / n) * 9];
+    const coxa = cfg.coxa || L.coxa;
+    const jl = pz.jl != null ? pz.jl : cfg.jl != null ? cfg.jl : -1;
+    const cl = pz.cl != null ? pz.cl : cfg.cl != null ? cfg.cl : 1;
+    const perna = (pe, jx, lado) => (jx ? [jx, pe] : ik(q, pe, coxa, L.canela, lado));
+    const braco = (mao, cx, lado) => (cx ? [cx, mao] : ik(o, mao, L.braco, L.antebraco, lado));
+    const m = pz.m || (pz.mo ? soma(o, pz.mo) : [o[0] + 2, o[1] + 26]);
+    const m2 = pz.m2 || (pz.mo2 ? soma(o, pz.mo2) : m);
+    const p = pz.p || [q[0], CHAO];
+    const p2 = pz.p2 || p;
+    const [j, pp] = perna(p, pz.j, jl);
+    const [j2, pp2] = perna(p2, pz.j2 || (pz.p2 ? null : pz.j), pz.jl2 != null ? pz.jl2 : jl);
+    const [c, mm] = braco(m, pz.c, cl);
+    const [c2, mm2] = braco(m2, pz.c2 || (pz.m2 || pz.mo2 ? null : pz.c), pz.cl2 != null ? pz.cl2 : cl);
+    return { q, o, cab, j, p: pp, j2, p2: pp2, c, m: mm, c2, m2: mm2, curva: pz.curva || 0, pa: pz.pa || 0, pa2: pz.pa2 != null ? pz.pa2 : pz.pa || 0 };
+  }
+  function misturar(a, b, t) {
+    const r = {};
+    for (const k of Object.keys(a)) r[k] = Array.isArray(a[k]) ? lerpP(a[k], b[k], t) : lerp(a[k], b[k], t);
+    return r;
+  }
+
+  /* ---------- Equipamentos e cenário ---------- */
+  const COR = { corpo: "var(--giz, #EDEBE6)", fundo: "var(--cinza-2, #646A72)", metal: "var(--cinza, #9399A1)", placa: "var(--brasa, #FF5B22)", movel: "var(--linha, #2B2F35)", estofado: "#3A3F47" };
+  const ln = (a, b, w, cor, extra = "") => `<line x1="${f1(a[0])}" y1="${f1(a[1])}" x2="${f1(b[0])}" y2="${f1(b[1])}" stroke="${cor}" stroke-width="${w}" stroke-linecap="round" ${extra}/>`;
+  const rect = (x, y, w, h, cor, r = 1.5) => `<rect x="${f1(x)}" y="${f1(y)}" width="${f1(w)}" height="${f1(h)}" rx="${r}" fill="${cor}"/>`;
+  const circ = (p, r, cor, extra = "") => `<circle cx="${f1(p[0])}" cy="${f1(p[1])}" r="${r}" fill="${cor}" ${extra}/>`;
+  const CENARIO = {
+    banco: (x1, x2, y) => rect(x1, y, x2 - x1, 4, COR.estofado) + ln([x1 + 4, y + 4], [x1 + 4, CHAO], 2.5, COR.movel) + ln([x2 - 4, y + 4], [x2 - 4, CHAO], 2.5, COR.movel),
+    encosto: (a, b) => ln(a, b, 5, COR.estofado),
+    cadeira: (x1, x2, y) => rect(x1, y, x2 - x1, 3, COR.movel) + ln([x1 + 1, y], [x1 - 1, y - 24], 3, COR.movel) + ln([x1 + 2, y + 3], [x1 + 2, CHAO], 2.5, COR.movel) + ln([x2 - 2, y + 3], [x2 - 2, CHAO], 2.5, COR.movel),
+    parede: (x) => rect(x - 3, 6, 4, CHAO - 6, COR.movel, 0),
+    degrau: (x1, x2, y) => rect(x1, y, x2 - x1, CHAO - y, COR.movel, 2),
+    mesa: (x1, x2, y) => rect(x1, y, x2 - x1, 3, COR.movel) + ln([x1 + 3, y + 3], [x1 + 3, CHAO], 2.5, COR.movel) + ln([x2 - 3, y + 3], [x2 - 3, CHAO], 2.5, COR.movel),
+    barraFixa: (x1, x2, y) => ln([x1, y], [x2, y], 2.5, COR.metal) + ln([x1, y], [x1, CHAO], 2.5, COR.movel) + ln([x2, y], [x2, CHAO], 2.5, COR.movel),
+    torre: (x, y1 = 2) => rect(x - 2, y1, 4, CHAO - y1, COR.movel, 1),
+    trilho: (a, b) => ln(a, b, 3, COR.movel),
+    colchonete: (x1, x2) => rect(x1, CHAO - 1.5, x2 - x1, 2.5, COR.estofado, 1),
+    pad: (p, r = 3.5) => circ(p, r, COR.estofado),
+    assento: (x1, x2, y) => rect(x1, y, x2 - x1, 4, COR.estofado) + ln([(x1 + x2) / 2, y + 4], [(x1 + x2) / 2, CHAO], 3, COR.movel) + ln([(x1 + x2) / 2 - 10, CHAO], [(x1 + x2) / 2 + 10, CHAO], 3, COR.movel),
+    esteira: (inclina) => { const a = [14, CHAO - 1], b = [106, CHAO - 1 - inclina]; return ln(a, b, 4, COR.movel) + ln([98, b[1] + 1], [92, 46], 3, COR.movel) + ln([92, 46], [80, 46], 3, COR.movel) + rect(88, 40, 10, 6, COR.movel, 1); },
+    bike: () => circ([86, 78], 12, "none", `stroke="${COR.movel}" stroke-width="3"`) + ln([60, 80], [86, 78], 3, COR.movel) + ln([60, 80], [48, 54], 3, COR.movel) + rect(40, 51, 14, 3, COR.estofado) + ln([60, 80], [82, 48], 3, COR.movel) + ln([82, 48], [90, 46], 3, COR.movel) + ln([50, CHAO], [96, CHAO], 3, COR.movel) + circ([60, 80], 2.5, COR.metal),
+    remo: () => ln([10, CHAO - 4], [100, CHAO - 4], 3, COR.movel) + circ([104, 76], 10, "none", `stroke="${COR.movel}" stroke-width="3"`) + ln([78, CHAO - 4], [80, 80], 3, COR.movel),
+    escada: () => rect(56, 80, 22, 12, COR.movel, 1) + rect(66, 68, 22, 12, COR.movel, 1) + ln([94, CHAO], [94, 36], 3, COR.movel),
+  };
+  function cenario(lista) { return (lista || []).map(([nome, ...args]) => CENARIO[nome](...args)).join(""); }
+
+  function halter(p, vertical) {
+    if (vertical) return ln([p[0], p[1] - 5], [p[0], p[1] + 5], 1.8, COR.metal) + rect(p[0] - 3.5, p[1] - 8, 7, 3.5, COR.placa, 1) + rect(p[0] - 3.5, p[1] + 4.5, 7, 3.5, COR.placa, 1);
+    return ln([p[0] - 5, p[1]], [p[0] + 5, p[1]], 1.8, COR.metal) + rect(p[0] - 8, p[1] - 3.5, 3.5, 7, COR.placa, 1) + rect(p[0] + 4.5, p[1] - 3.5, 3.5, 7, COR.placa, 1);
+  }
+  function equip(e, P, frente) {
+    const em = P[e.em || "m"];
+    switch (e.tipo) {
+      case "barra": return circ(em, 8.5, COR.placa) + circ(em, 3.2, "var(--ferro, #0D0E10)") + circ(em, 1.6, COR.metal);
+      case "halter": return halter(em, e.vertical);
+      case "kettle": return `<path d="M${f1(em[0] - 3)} ${f1(em[1] + 1)} a3 3 0 0 1 6 0" fill="none" stroke="${COR.metal}" stroke-width="1.8"/>` + circ([em[0], em[1] + 6], 5.5, COR.placa);
+      case "mochila": return rect(em[0] - 5, em[1], 10, 12, COR.placa, 3) + ln([em[0] - 2, em[1]], [em[0] - 2, em[1] - 2], 1.5, COR.metal);
+      case "garrafa": return rect(em[0] - 2.5, em[1] - 4, 5, 10, "#4EA8DE", 1.5) + rect(em[0] - 1.2, em[1] - 6, 2.4, 2.2, "#4EA8DE", 0.6);
+      case "cabo": {
+        const anc = frente && e.lado === 2 ? espelho(e.ancora) : e.ancora;
+        let alca = "";
+        if (e.alca === "barra") alca = ln([em[0] - 6, em[1]], [em[0] + 6, em[1]], 2.2, COR.metal);
+        else if (e.alca === "corda") alca = ln(em, [em[0] + 1.5, em[1] + 5], 2.2, "#C9A86B") + ln(em, [em[0] - 1.5, em[1] + 5], 2.2, "#C9A86B");
+        else alca = circ(em, 2.2, "none", `stroke="${COR.metal}" stroke-width="1.6"`);
+        return ln(anc, em, 1, COR.metal, 'stroke-dasharray="0"') + circ(anc, 2.6, COR.movel) + alca;
+      }
+      case "rolo": return circ(em, 3.6, COR.estofado);
+      case "placa": { const a = rad(e.ang); return ln([em[0] - 9 * Math.cos(a), em[1] + 9 * Math.sin(a)], [em[0] + 9 * Math.cos(a), em[1] - 9 * Math.sin(a)], 3.5, COR.metal); }
+      case "toalha": return ln(P.p, P.m, 1.6, "#C9A86B");
+      case "barrinha": return ln([em[0] - 7, em[1]], [em[0] + 7, em[1]], 2.4, COR.metal);
+      case "pegador": return circ(em, 2, COR.metal);
+      default: return "";
+    }
+  }
+
+  /* ---------- Desenho do boneco ---------- */
+  function membro(a, b, c, w, cor, op = 1) { return `<polyline points="${f1(a[0])},${f1(a[1])} ${f1(b[0])},${f1(b[1])} ${f1(c[0])},${f1(c[1])}" fill="none" stroke="${cor}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" opacity="${op}"/>`; }
+  function pe(p, ang, cor, op = 1) { const a = rad(ang); return ln(p, [p[0] + 6 * Math.cos(a), p[1] + 6 * Math.sin(a)], 4, cor, `opacity="${op}"`); }
+  function tronco(q, o, curva, w, cor) {
+    const mx = (q[0] + o[0]) / 2, my = (q[1] + o[1]) / 2, dx = o[0] - q[0], dy = o[1] - q[1], n = Math.hypot(dx, dy) || 1;
+    const cx = mx + (-dy / n) * curva, cy = my + (dx / n) * curva;
+    return `<path d="M${f1(q[0])} ${f1(q[1])} Q${f1(cx)} ${f1(cy)} ${f1(o[0])} ${f1(o[1])}" fill="none" stroke="${cor}" stroke-width="${w}" stroke-linecap="round"/>`;
+  }
+  function desenharLateral(P, def) {
+    const atras = COR.fundo;
+    let s = "";
+    s += membro(P.q, P.j2, P.p2, 5.5, atras, 0.9) + pe(P.p2, P.pa2, atras, 0.9);
+    s += membro(P.o, P.c2, P.m2, 4.5, atras, 0.9);
+    s += (def.equipAtras || []).map((e) => equip({ ...e, em: e.em || "m2" }, P)).join("");
+    s += tronco(P.q, P.o, P.curva, 7.5, COR.corpo);
+    s += circ(P.cab, 5.6, COR.corpo);
+    s += membro(P.q, P.j, P.p, 6, COR.corpo) + pe(P.p, P.pa, COR.corpo);
+    s += membro(P.o, P.c, P.m, 5, COR.corpo);
+    s += (def.equip || []).map((e) => equip(e, P)).join("");
+    return s;
+  }
+  function desenharFrente(P, def) {
+    const qm = [60, P.q[1]], om = [60, P.o[1]];
+    const qe = espelho(P.q), oe = espelho(P.o);
+    const L2 = { j: espelho(P.j2), p: espelho(P.p2), c: espelho(P.c2), m: espelho(P.m2) };
+    let s = "";
+    s += ln(qe, P.q, 6, COR.corpo) + ln(qm, om, 8, COR.corpo) + ln(oe, P.o, 6, COR.corpo);
+    s += circ([60, P.o[1] - 10], 5.6, COR.corpo);
+    s += membro(P.q, P.j, P.p, 5.5, COR.corpo) + membro(qe, L2.j, L2.p, 5.5, COR.corpo);
+    s += membro(P.o, P.c, P.m, 4.5, COR.corpo) + membro(oe, L2.c, L2.m, 4.5, COR.corpo);
+    for (const e of def.equip || []) {
+      s += equip(e, P, true);
+      s += equip({ ...e, lado: 2 }, { ...P, m: L2.m, p: L2.p, j: L2.j }, true);
+    }
+    return s;
+  }
+
+  /* ---------- Biblioteca de movimentos ---------- */
+  const hang = [2, 26];
+  const M = {};
+  // Agachamentos
+  M.agachamento = (v) => {
+    const braco = v === "barra" ? { mo: [-5, 1], cl: 1 } : v === "goblet" ? { mo: [9, 7], cl: 1 } : v === "hack" ? { mo: [-3, 3] } : { mo: [21, 3] };
+    const fundo = v === "hack" ? [["trilho", [30, 92], [48, 8]]] : [];
+    const prof = v === "parcial" ? { q: [52, 63], t: 70 } : { q: [45, 70], t: 52 };
+    const eq = v === "barra" ? [{ tipo: "barra" }] : v === "goblet" ? [{ tipo: "halter", vertical: true }] : [];
+    return { A: { q: [58, 54], t: 88, p: [60, CHAO], ...braco }, B: { ...prof, p: [60, CHAO], ...braco }, fundo, equip: eq };
+  };
+  M.sentar = () => ({ A: { q: [58, 54], t: 88, p: [62, CHAO], mo: [21, 3] }, B: { q: [44, 71], t: 62, p: [62, CHAO], mo: [22, 0] }, fundo: [["cadeira", 30, 50, 74]] });
+  M.cadeirinha = () => ({ A: { q: [46, 72], t: 90, p: [66, CHAO], mo: [12, 20] }, B: { q: [46, 73], t: 90, p: [66, CHAO], mo: [12, 21] }, fundo: [["parede", 40]] });
+  M.degrau = () => ({ A: { q: [52, 55], t: 88, p: [50, CHAO], p2: [72, 77], jl2: -1, mo: hang }, B: { q: [68, 40], t: 90, p: [62, 73], p2: [72, 77], mo: hang }, fundo: [["degrau", 60, 86, 78]] });
+  M.afundo = (v) => {
+    const eq = v === "halteres" ? [{ tipo: "halter", vertical: true }] : [];
+    const reverso = v === "reverso";
+    return { A: { q: [58, 54], t: 88, p: [60, CHAO], p2: [58, CHAO], mo: hang },
+      B: reverso ? { q: [60, 67], t: 80, p: [70, CHAO], p2: [34, 91], jl2: -1, mo: hang } : { q: [56, 67], t: 86, p: [78, CHAO], p2: [38, 91], jl2: -1, mo: hang },
+      equip: eq.length ? eq : [], equipAtras: eq.length ? [{ tipo: "halter", vertical: true }] : [] };
+  };
+  M.bulgaro = () => ({ A: { q: [62, 56], t: 88, p: [74, CHAO], p2: [38, 69], jl2: -1, mo: hang }, B: { q: [57, 69], t: 80, p: [74, CHAO], p2: [38, 69], jl2: -1, mo: hang },
+    fundo: [["banco", 22, 46, 70]], equip: [{ tipo: "halter", vertical: true }], equipAtras: [{ tipo: "halter", vertical: true }] });
+  M.legpress = (v) => {
+    const fundo = [["trilho", [36, 80], [104, 22]], ["encosto", [42, 72], [20, 52]], ["assento", 30, 52, 74]];
+    const pa = v === "panturrilha" ? [-40, -10] : [-50, -50];
+    const B = v === "panturrilha" ? { q: [40, 70], t: 140, p: [77, 43], mo: [12, 24], pa: pa[1] } : { q: [40, 70], t: 140, p: [62, 55], jl: 1, mo: [12, 24], pa: pa[1] };
+    return { A: { q: [40, 70], t: 140, p: [78, 41], jl: 1, mo: [12, 24], pa: pa[0] }, B, fundo, equip: [{ tipo: "placa", em: "p", ang: 130 }] };
+  };
+  M.extensora = (v) => {
+    const fundo = [["assento", 36, 70, 64], ["encosto", [38, 62], [36, 34]]];
+    const baixo = { q: [50, 61], t: 96, p: [70, 88], jl: -1, mo: [10, 22] }, alto = { q: [50, 61], t: 96, p: [87, 60], mo: [10, 22] };
+    return v === "flexora" ? { A: alto, B: { ...baixo, p: [62, 84] }, fundo, equip: [{ tipo: "rolo", em: "p" }] } : { A: baixo, B: alto, fundo, equip: [{ tipo: "rolo", em: "p" }] };
+  };
+  M.mesaFlexora = () => ({ A: { q: [62, 58], t: 180, p: [100, 59], jl: 1, m: [26, 66] }, B: { q: [62, 58], t: 180, p: [80, 38], jl: 1, m: [26, 66] }, fundo: [["banco", 22, 98, 62]], equip: [{ tipo: "rolo", em: "p" }] });
+  // Dobradiça de quadril
+  M.dobradica = (v) => {
+    const braco = v === "bomdia" ? { mo: [-4, -6] } : { mo: [3, 25] };
+    const eq = v === "barra" ? [{ tipo: "barra" }] : v === "halteres" ? [{ tipo: "halter" }] : v === "kettle" ? [{ tipo: "kettle" }] : [];
+    return { A: { q: [58, 54], t: 86, p: [60, CHAO], ...braco }, B: { q: [46, 53], t: 18, p: [60, CHAO], ...braco }, equip: eq };
+  };
+  M.swing = () => ({ A: { q: [46, 54], t: 28, p: [60, CHAO], m: [58, 78] }, B: { q: [58, 54], t: 90, p: [60, CHAO], mo: [27, 1] }, equip: [{ tipo: "kettle" }] });
+  M.elevacaoPelvica = (v) => {
+    const eq = v === "barra" ? [{ tipo: "barra", em: "m" }] : v === "halter" ? [{ tipo: "halter", em: "m" }] : [];
+    const fundo = v === "solo" ? [["colchonete", 16, 100]] : [["banco", 10, 38, 64]];
+    if (v === "solo" || v === "unilateral") {
+      const ex = v === "unilateral" ? { p2: [96, 64], jl2: -1 } : {};
+      return { A: { q: [54, 88], o: [28, 88], p: [74, CHAO], jl: 1, m: [42, 91], ...ex }, B: { q: [56, 73], o: [29, 86], p: [74, CHAO], jl: 1, m: [42, 91], ...ex }, fundo: [["colchonete", 16, 100]] };
+    }
+    return { A: { q: [54, 81], o: [32, 66], p: [76, CHAO], jl: 1, m: [56, 76] }, B: { q: [58, 64], o: [33, 63], p: [76, CHAO], jl: 1, m: [58, 59] }, fundo, equip: eq };
+  };
+  M.abducaoLado = () => ({ A: { q: [64, 84], t: 180, p: [100, 88], m: [36, 72], pa: 90 }, B: { q: [64, 84], t: 180, p: [100, 88], p2: [96, 66], m: [36, 72], pa: 90, pa2: 90 }, fundo: [["colchonete", 14, 106]] });
+  M.quatroApoios = (v) => {
+    const base = { q: [72, 66], o: [44, 68], m: [44, CHAO], j: [72, 88], p: [90, 89], cl: -1 };
+    if (v === "perdigueiro") return { A: base, B: { ...base, m2: [16, 64], c2: [31, 66], p2: [108, 62], j2: [90, 64] }, fundo: [["colchonete", 26, 108]] };
+    if (v === "gato") return { A: { ...base, curva: -9 }, B: { ...base, curva: 6 }, fundo: [["colchonete", 26, 108]] };
+    return { A: base, B: { ...base, j2: [90, 66], p2: [91, 46] }, fundo: [["colchonete", 26, 108]] };
+  };
+  M.coicePolia = () => ({ A: { q: [58, 54], t: 84, p: [60, CHAO], m: [78, 44] }, B: { q: [56, 55], t: 76, p: [60, CHAO], p2: [32, 82], jl2: 1, m: [78, 44] }, fundo: [["torre", 100, 30]], equip: [{ tipo: "cabo", em: "p2", ancora: [98, 88] }] });
+  M.abdutora = () => ({ frente: true, A: { q: [65, 62], o: [67, 34], j: [67, 72], p: [67, 90], m: [80, 64] }, B: { q: [65, 62], o: [67, 34], j: [82, 69], p: [72, 90], m: [80, 64] }, fundo: [["assento", 44, 76, 64]], equip: [{ tipo: "rolo", em: "j" }] });
+  M.panturrilha = (v) => {
+    if (v === "sentado") return { A: { q: [50, 64], t: 94, j: [69, 66], p: [70, 86], pa: -15, mo: [14, 22] }, B: { q: [50, 61], t: 94, j: [69, 62], p: [70, 82], pa: 40, mo: [14, 20] }, fundo: [["assento", 36, 66, 67], ["degrau", 66, 80, 86]], equip: [{ tipo: "rolo", em: "j" }] };
+    return { A: { q: [58, 49], t: 89, p: [62, 87], pa: 15, mo: [20, 2] }, B: { q: [58, 43], t: 89, p: [62, 82], pa: 55, mo: [20, -2] }, fundo: [["degrau", 54, 76, 87], ["parede", 92]] };
+  };
+  // Empurrar deitado
+  const BANCO_RETO = [["banco", 24, 84, 66]];
+  M.supino = (v) => {
+    const corpo = { q: [70, 62], o: [42, 62], p: [90, CHAO], jl: 1 };
+    const eq = v === "barra" ? [{ tipo: "barra" }] : [{ tipo: "halter" }];
+    return { A: { ...corpo, m: [44, 36] }, B: { ...corpo, m: [46, 56], cl: -1 }, fundo: BANCO_RETO, equip: eq };
+  };
+  M.supinoInclinado = () => ({ A: { q: [68, 64], o: [46, 51], p: [90, CHAO], jl: 1, m: [50, 25] }, B: { q: [68, 64], o: [46, 51], p: [90, CHAO], jl: 1, m: [52, 45], cl: -1 },
+    fundo: [["banco", 56, 82, 68], ["encosto", [64, 66], [32, 47]]], equip: [{ tipo: "halter" }] });
+  M.crucifixo = () => ({ A: { q: [70, 62], o: [42, 62], p: [90, CHAO], jl: 1, m: [44, 36] }, B: { q: [70, 62], o: [42, 62], p: [90, CHAO], jl: 1, m: [36, 70], cl: -1 }, fundo: BANCO_RETO, equip: [{ tipo: "halter" }] });
+  M.pullover = () => ({ A: { q: [70, 62], o: [42, 62], p: [90, CHAO], jl: 1, m: [46, 37] }, B: { q: [70, 62], o: [42, 62], p: [90, CHAO], jl: 1, m: [17, 62], cl: -1 }, fundo: BANCO_RETO, equip: [{ tipo: "halter", vertical: true }] });
+  M.testa = () => ({ A: { q: [70, 62], o: [42, 62], p: [90, CHAO], jl: 1, c: [39, 49], m: [37, 36] }, B: { q: [70, 62], o: [42, 62], p: [90, CHAO], jl: 1, c: [39, 49], m: [27, 57] }, fundo: BANCO_RETO, equip: [{ tipo: "halter" }] });
+  M.supinoMaquina = () => ({ A: { q: [48, 68], t: 92, p: [74, CHAO], m: [61, 43] , cl: 1}, B: { q: [48, 68], t: 92, p: [74, CHAO], m: [76, 43] }, fundo: [["assento", 36, 62, 70], ["encosto", [40, 68], [40, 34]], ["torre", 88, 20]], equip: [{ tipo: "pegador" }] });
+  M.crossover = () => ({ frente: true, A: { q: [65, 56], o: [69, 30], p: [70, CHAO], c: [84, 24], m: [97, 17] }, B: { q: [65, 56], o: [69, 30], p: [70, CHAO], c: [74, 42], m: [64, 54] },
+    fundo: [["torre", 114, 2], ["torre", 6, 2]], equip: [{ tipo: "cabo", ancora: [112, 6], alca: "d" }] });
+  M.peckDeck = () => ({ frente: true, A: { q: [65, 64], o: [69, 38], j: [70, 74], p: [70, 90], c: [86, 39], m: [88, 25] }, B: { q: [65, 64], o: [69, 38], j: [70, 74], p: [70, 90], c: [72, 44], m: [64, 30] },
+    fundo: [["assento", 44, 76, 66], ["torre", 100, 14], ["torre", 20, 14]], equip: [{ tipo: "pegador" }] });
+  // Flexões
+  M.flexao = (v) => {
+    if (v === "inclinada") return { A: { q: [72, 68], o: [44, 50], m: [40, 70], p: [102, CHAO], cl: -1 }, B: { q: [73, 73], o: [47, 62], m: [40, 70], p: [102, CHAO], cl: -1 }, fundo: [["banco", 26, 52, 70]] };
+    if (v === "joelhos") return { A: { q: [72, 76], o: [45, 66], m: [44, CHAO], j: [88, 91], p: [102, 80], cl: -1 }, B: { q: [72, 83], o: [47, 80], m: [44, CHAO], j: [88, 91], p: [102, 80], cl: -1 }, fundo: [["colchonete", 30, 108]] };
+    if (v === "pike") return { A: { q: [66, 52], o: [49, 72], m: [42, CHAO], p: [92, CHAO], cl: -1 }, B: { q: [64, 56], o: [47, 80], m: [42, CHAO], p: [92, CHAO], cl: -1 }, fundo: [["colchonete", 30, 104]] };
+    return { A: { q: [72, 76], o: [44, 66], m: [44, CHAO], p: [104, CHAO], cl: -1 }, B: { q: [73, 82], o: [47, 80], m: [44, CHAO], p: [104, CHAO], cl: -1 }, fundo: [["colchonete", 30, 110]] };
+  };
+  M.mergulho = () => ({ A: { q: [46, 72], o: [42, 46], m: [36, 64], p: [92, CHAO], jl: -1, cl: 1 }, B: { q: [48, 84], o: [44, 58], m: [36, 64], p: [92, CHAO], cl: 1 }, fundo: [["banco", 14, 40, 66]] });
+  // Puxar
+  M.remadaCurvada = (v) => {
+    const eq = v === "barra" ? [{ tipo: "barra" }] : v === "mochila" ? [{ tipo: "mochila" }] : [{ tipo: "halter" }];
+    return { A: { q: [50, 54], t: 30, p: [60, CHAO], mo: [2, 24] }, B: { q: [50, 54], t: 30, p: [60, CHAO], mo: [-9, 10], cl: -1 }, equip: eq, equipAtras: v === "halteres" ? [{ tipo: "halter" }] : [] };
+  };
+  M.remadaUnilateral = () => ({ A: { q: [48, 56], t: 14, p: [52, CHAO], mo: [1, 24], m2: [86, 66] }, B: { q: [48, 56], t: 14, p: [52, CHAO], mo: [-10, 8], cl: -1, m2: [86, 66] },
+    fundo: [["banco", 78, 112, 66]], equip: [{ tipo: "halter" }] });
+  M.remadaBaixa = () => ({ A: { q: [40, 70], t: 100, p: [74, 70], jl: -1, m: [74, 54] }, B: { q: [40, 70], t: 94, p: [74, 70], jl: -1, m: [52, 58], cl: 1 },
+    fundo: [["assento", 26, 54, 72], ["trilho", [78, 62], [80, 80]], ["torre", 108, 40]], equip: [{ tipo: "cabo", ancora: [106, 64], alca: "d" }] });
+  M.puxada = () => ({ A: { q: [56, 70], t: 90, p: [80, CHAO], m: [62, 10] }, B: { q: [56, 70], t: 86, p: [80, CHAO], m: [62, 37], cl: 1 },
+    fundo: [["assento", 44, 68, 72], ["pad", [74, 64]], ["torre", 92, 2]], equip: [{ tipo: "cabo", ancora: [62, 3], alca: "barra" }] });
+  M.barraFixa = () => ({ A: { q: [60, 58], o: [60, 32], m: [60, 9], p: [58, 92], jl: -1 }, B: { q: [60, 44], o: [60, 18], m: [60, 9], p: [56, 76], jl: -1, cl: 1 }, fundo: [["barraFixa", 36, 84, 8]] });
+  M.pulldown = () => ({ A: { q: [52, 56], t: 76, p: [56, CHAO], m: [84, 18] }, B: { q: [52, 56], t: 76, p: [56, CHAO], m: [66, 60] }, fundo: [["torre", 104, 2]], equip: [{ tipo: "cabo", ancora: [101, 4], alca: "barra" }] });
+  M.remadaMesa = () => ({ A: { q: [80, 82], o: [56, 74], m: [58, 50], p: [106, 90], jl: 1 }, B: { q: [80, 72], o: [56, 60], m: [58, 50], p: [106, 90], jl: 1, cl: -1 }, fundo: [["mesa", 36, 86, 48]] });
+  M.solo = (v) => {
+    if (v === "superman") return { A: { q: [72, 87], o: [46, 87], m: [22, 89], p: [108, 89] }, B: { q: [72, 87], o: [46, 82], m: [21, 75], p: [107, 82], curva: 3 }, fundo: [["colchonete", 14, 112]] };
+    if (v === "retracao") return { A: { q: [72, 87], o: [46, 87], c: [44, 80], m: [34, 82], p: [108, 89] }, B: { q: [72, 87], o: [46, 86], c: [54, 76], m: [40, 77], p: [108, 89] }, fundo: [["colchonete", 14, 112]] };
+    return { A: { q: [72, 87], o: [46, 87], m: [20, 88], p: [108, 89] }, B: { q: [72, 87], o: [46, 85], m: [21, 76], p: [108, 89] }, fundo: [["colchonete", 14, 112]] }; // Y-T-W
+  };
+  // Ombros
+  M.desenvolvimento = (v) => ({ A: { q: [54, 66], t: 92, p: [80, CHAO], mo: [5, -3], cl: 1 }, B: { q: [54, 66], t: 92, p: [80, CHAO], mo: [3, -26] },
+    fundo: [["assento", 40, 66, 68], ["encosto", [46, 66], [46, 30]]], equip: v === "maquina" ? [{ tipo: "pegador" }] : [{ tipo: "halter" }] });
+  M.elevacaoLateral = (v) => ({ frente: true, A: { q: [65, 56], o: [69, 30], p: [66, CHAO], c: [71, 43], m: [71, 55] }, B: { q: [65, 56], o: [69, 30], p: [66, CHAO], c: [82, 31], m: [94, 32] },
+    equip: v === "polia" ? [{ tipo: "cabo", ancora: [40, 90], alca: "d" }] : [{ tipo: "halter", vertical: true }], fundo: v === "polia" ? [["torre", 14, 40]] : [] });
+  M.elevacaoFrontal = (v) => ({ A: { q: [58, 54], t: 90, p: [60, CHAO], mo: [3, 26] }, B: { q: [58, 54], t: 90, p: [60, CHAO], mo: [27, -1] }, equip: [{ tipo: v === "garrafa" ? "garrafa" : "halter" }] });
+  M.facePull = () => ({ A: { q: [54, 54], t: 92, p: [56, CHAO], m: [80, 25] }, B: { q: [54, 54], t: 92, p: [56, CHAO], m: [62, 22], cl: -1 }, fundo: [["torre", 110, 2]], equip: [{ tipo: "cabo", ancora: [108, 25], alca: "corda" }] });
+  M.crucifixoInverso = (v) => (v === "maquina"
+    ? { A: { q: [52, 70], t: 98, p: [76, CHAO], m: [78, 40] }, B: { q: [52, 70], t: 98, p: [76, CHAO], m: [32, 42] }, fundo: [["assento", 40, 64, 72], ["pad", [60, 48], 5]], equip: [{ tipo: "pegador" }] }
+    : { A: { q: [50, 54], t: 22, p: [60, CHAO], mo: [1, 24] }, B: { q: [50, 54], t: 22, p: [60, CHAO], mo: [-3, -4], cl: 1 }, equip: [{ tipo: "halter" }] });
+  // Braços
+  M.rosca = (v) => {
+    const eq = { barra: [{ tipo: "barrinha" }], halter: [{ tipo: "halter" }], martelo: [{ tipo: "halter", vertical: true }], mochila: [{ tipo: "mochila" }], polia: [{ tipo: "cabo", ancora: [86, 88], alca: "barra" }], toalha: [{ tipo: "toalha" }] }[v] || [];
+    const fundo = v === "polia" ? [["torre", 88, 40]] : [];
+    if (v === "scott") return { A: { q: [52, 66], t: 96, p: [70, CHAO], c: [64, 46], m: [80, 58] }, B: { q: [52, 66], t: 96, p: [70, CHAO], c: [64, 46], m: [68, 32] }, fundo: [["assento", 40, 62, 68], ["encosto", [58, 42], [76, 56]]], equip: [{ tipo: "barrinha" }] };
+    if (v === "toalha") return { A: { q: [58, 54], t: 90, p: [62, CHAO], c: [60, 42], m: [68, 46] }, B: { q: [58, 54], t: 90, p: [62, CHAO], c: [60, 42], m: [68, 44] }, equip: [{ tipo: "toalha" }] };
+    return { A: { q: [58, 54], t: 90, p: [60, CHAO], c: [59, 42], m: [62, 55] }, B: { q: [58, 54], t: 90, p: [60, CHAO], c: [59, 42], m: [70, 31] }, fundo, equip: eq };
+  };
+  M.tricepsPolia = (v) => ({ A: { q: [56, 54], t: 92, p: [58, CHAO], c: [58, 42], m: [69, 33] }, B: { q: [56, 54], t: 92, p: [58, CHAO], c: [58, 42], m: [64, 55] }, fundo: [["torre", 86, 2]], equip: [{ tipo: "cabo", ancora: [78, 4], alca: v }] });
+  M.frances = () => ({ A: { q: [54, 66], t: 92, p: [80, CHAO], c: [55, 26], m: [56, 13] }, B: { q: [54, 66], t: 92, p: [80, CHAO], c: [55, 26], m: [44, 36] }, fundo: [["assento", 40, 66, 68]], equip: [{ tipo: "halter", vertical: true }] });
+  M.coice = () => ({ A: { q: [50, 54], t: 22, p: [60, CHAO], c: [62, 50], m: [64, 62] }, B: { q: [50, 54], t: 22, p: [60, CHAO], c: [62, 50], m: [50, 49] }, equip: [{ tipo: "halter" }] });
+  M.parede = () => ({ A: { q: [56, 56], t: 72, p: [50, CHAO], m: [86, 30] }, B: { q: [52, 56], t: 76, p: [50, CHAO], m: [86, 32], cl: 1 }, fundo: [["parede", 90]] });
+  // Core
+  M.prancha = (v) => (v === "lateral"
+    ? { A: { q: [70, 76], o: [44, 79], c: [42, 91], m: [56, 91], p: [104, 90], m2: [70, 74], c2: [56, 70] }, B: { q: [70, 72], o: [44, 79], c: [42, 91], m: [56, 91], p: [104, 90], m2: [70, 70], c2: [56, 68] }, fundo: [["colchonete", 30, 110]] }
+    : { A: { q: [72, 80], o: [46, 80], c: [44, 91], m: [58, 91], p: [104, 90] }, B: { q: [72, 79], o: [46, 80], c: [44, 91], m: [58, 91], p: [104, 90] }, fundo: [["colchonete", 30, 110]] });
+  M.deadBug = () => ({ A: { q: [66, 88], o: [40, 88], m: [44, 62], m2: [44, 62], j: [68, 70], p: [84, 72], j2: [68, 70], p2: [84, 72] }, B: { q: [66, 88], o: [40, 88], m: [16, 84], m2: [44, 62], j: [84, 86], p: [102, 86], j2: [68, 70], p2: [84, 72] }, fundo: [["colchonete", 20, 110]] });
+  M.crunch = () => ({ A: { q: [62, 88], o: [36, 88], p: [84, CHAO], jl: -1, mo: [-4, -6] }, B: { q: [62, 88], o: [39, 76], curva: 3, p: [84, CHAO], jl: -1, mo: [-4, -6] }, fundo: [["colchonete", 20, 106]] });
+  M.elevacaoPernas = () => ({ A: { q: [62, 88], o: [36, 88], p: [99, 86], m: [64, 91] }, B: { q: [62, 88], o: [36, 88], p: [68, 51], jl: 1, m: [64, 91] }, fundo: [["colchonete", 20, 106]] });
+  M.hollow = () => ({ A: { q: [64, 86], o: [40, 82], curva: -3, m: [16, 76], p: [100, 80] }, B: { q: [64, 86], o: [40, 81], curva: -3, m: [16, 75], p: [100, 79] }, fundo: [["colchonete", 20, 106]] });
+  M.pallof = () => ({ A: { q: [56, 54], t: 90, p: [58, CHAO], m: [66, 36], cl: 1 }, B: { q: [56, 54], t: 90, p: [58, CHAO], m: [82, 36] }, fundo: [["torre", 112, 20]], equip: [{ tipo: "cabo", ancora: [110, 36], alca: "d" }] });
+  M.abdominalPolia = () => ({ A: { q: [56, 70], t: 96, j: [60, 90], p: [40, 91], mo: [4, -2] }, B: { q: [56, 70], t: 30, j: [60, 90], p: [40, 91], mo: [6, 2], curva: 4 }, fundo: [["torre", 70, 2], ["colchonete", 26, 80]], equip: [{ tipo: "cabo", ancora: [70, 4], alca: "corda" }] });
+  // Cardio
+  M.corrida = (v) => {
+    const passo = v === "caminhada" ? 12 : 20;
+    const esteira = v === "parado" || v === "marcha" ? [] : [["esteira", v === "caminhada" ? 10 : 4]];
+    const y = v === "parado" ? CHAO : CHAO - 2;
+    if (v === "parado" || v === "marcha") {
+      const alto = v === "marcha" ? 66 : 60;
+      return { A: { q: [58, 54], t: 88, p: [60, CHAO], p2: [72, alto + 16], j2: [74, alto], mo: [14, -8], mo2: [-6, 18] }, B: { q: [58, 54], t: 88, p: [72, alto + 16], j: [74, alto], p2: [60, CHAO], mo: [-6, 18], mo2: [14, -8] }, fundo: esteira };
+    }
+    return { A: { q: [60, 52], t: 82, p: [60 + passo, y], p2: [60 - passo, y - 4], mo: [10, 4], mo2: [-8, 14] }, B: { q: [60, 52], t: 82, p: [60 - passo, y - 4], p2: [60 + passo, y], mo: [-8, 14], mo2: [10, 4] }, fundo: esteira };
+  };
+  M.bike = () => ({ A: { q: [48, 50], t: 70, p: [68, 80], p2: [52, 80], m: [86, 47], jl: -1 }, B: { q: [48, 50], t: 70, p: [60, 72], p2: [60, 88], m: [86, 47], jl: -1 }, fundo: [["bike"]] });
+  M.remo = () => ({ A: { q: [44, 84], t: 66, p: [80, 84], jl: -1, m: [86, 66] }, B: { q: [26, 84], t: 104, p: [80, 84], jl: -1, m: [50, 66], cl: 1 }, fundo: [["remo"]], equip: [{ tipo: "cabo", ancora: [100, 74], alca: "barra" }] });
+  M.escada = () => ({ A: { q: [60, 50], t: 86, p: [66, 80], p2: [76, 68], m: [90, 44] }, B: { q: [62, 44], t: 86, p: [66, 74], p2: [76, 66], m: [90, 42] }, fundo: [["escada"]] });
+  M.polichinelo = (v) => ({ frente: true, A: { q: [65, 56], o: [69, 30], p: [65, CHAO], c: [71, 43], m: [71, 55] }, B: v === "sem" ? { q: [65, 56], o: [69, 30], p: [80, CHAO], p2: [65, CHAO], c: [80, 20], m: [84, 7] } : { q: [65, 54], o: [69, 28], p: [78, CHAO], c: [80, 18], m: [84, 5] } });
+  M.burpee = () => ({ A: { q: [58, 54], t: 88, p: [62, CHAO], mo: [8, -18] }, B: { q: [74, 78], o: [46, 70], m: [46, CHAO], p: [104, CHAO], cl: -1 }, fundo: [["colchonete", 30, 110]] });
+  M.escalador = () => ({ A: { q: [74, 70], o: [46, 64], m: [46, CHAO], p: [104, CHAO], p2: [64, 86], jl2: -1, cl: -1 }, B: { q: [74, 70], o: [46, 64], m: [46, CHAO], p: [64, 86], jl: -1, p2: [104, CHAO], cl: -1 }, fundo: [["colchonete", 30, 110]] });
+  M.socos = () => ({ A: { q: [58, 54], t: 88, p: [60, CHAO], mo: [26, 0] }, B: { q: [46, 69], t: 56, p: [60, CHAO], mo: [9, 4], cl: 1 } });
+  // Mobilidade
+  M.rotacaoToracica = () => ({ A: { q: [66, 84], o: [42, 84], j: [76, 76], p: [88, 86], m: [66, 88] }, B: { q: [66, 84], o: [42, 82], j: [76, 76], p: [88, 86], m: [26, 66], cl: -1 }, fundo: [["colchonete", 20, 106]] });
+  M.noventa = () => ({ A: { q: [56, 86], t: 92, j: [76, 80], p: [80, 90], j2: [40, 82], p2: [34, 90], mo: [10, 22] }, B: { q: [56, 86], t: 70, j: [76, 80], p: [80, 90], j2: [40, 82], p2: [34, 90], mo: [22, 14] }, fundo: [["colchonete", 20, 100]] });
+  M.flexorQuadril = () => ({ A: { q: [54, 66], t: 92, j: [72, 70], p: [74, CHAO], j2: [44, 89], p2: [26, 90], mo: [0, 26] }, B: { q: [60, 70], t: 96, j: [76, 72], p: [74, CHAO], j2: [46, 90], p2: [26, 90], mo: [0, 25] }, fundo: [["colchonete", 16, 96]] });
+  M.afundoRotacao = () => ({ A: { q: [56, 68], t: 40, p: [80, CHAO], p2: [30, 90], jl2: -1, m: [82, 90], m2: [80, 90] }, B: { q: [56, 68], t: 52, p: [80, CHAO], p2: [30, 90], jl2: -1, m: [86, 16], m2: [80, 90] } });
+  M.tornozelo = () => ({ A: { q: [52, 70], t: 90, j: [70, 70], p: [74, CHAO], j2: [44, 90], p2: [28, 90], m: [92, 46] }, B: { q: [56, 70], t: 88, j: [80, 72], p: [74, CHAO], j2: [46, 90], p2: [28, 90], m: [92, 46] }, fundo: [["parede", 96]] });
+  M.peitoralParede = () => ({ A: { q: [62, 54], t: 90, p: [64, CHAO], c: [48, 32], m: [42, 18] }, B: { q: [66, 54], t: 92, p: [64, CHAO], c: [50, 32], m: [42, 18] }, fundo: [["parede", 38]] });
+  M.respiracao = () => ({ A: { q: [62, 88], o: [36, 88], p: [84, CHAO], jl: -1, m: [52, 82] }, B: { q: [62, 88], o: [36, 88], curva: -5, p: [84, CHAO], jl: -1, m: [52, 79] }, fundo: [["colchonete", 20, 106]] });
+
+  /* ---------- Exercício -> movimento + legenda (equipamento, pegada, ângulo) ---------- */
+  const E = {
+    supino_reto: ["supino", "barra", "Barra livre · pegada pronada um pouco mais aberta que os ombros · banco reto"],
+    supino_inclinado_h: ["supinoInclinado", "", "Halteres · pegada pronada · banco inclinado a 30°"],
+    supino_halteres: ["supino", "halteres", "Halteres · pegada pronada · banco reto"],
+    supino_maquina: ["supinoMaquina", "", "Máquina de supino sentado · pegada horizontal na linha do peito"],
+    crucifixo_maquina: ["peckDeck", "", "Voador (peck deck) · braços em arco, cotovelos levemente dobrados"],
+    crossover: ["crossover", "", "Polia alta dos dois lados · pegadores simples · mãos se encontram embaixo"],
+    crucifixo_h: ["crucifixo", "", "Halteres · pegada neutra (palmas uma para a outra) · banco reto"],
+    flexao: ["flexao", "", "Peso do corpo · mãos na largura dos ombros · corpo em prancha"],
+    flexao_inclinada: ["flexao", "inclinada", "Mãos apoiadas no banco ou sofá · corpo inclinado"],
+    flexao_aberta: ["flexao", "", "Peso do corpo · mãos mais abertas que os ombros · pausa embaixo"],
+    puxada_frontal: ["puxada", "", "Polia alta com barra longa · pegada pronada aberta · sentado"],
+    remada_baixa: ["remadaBaixa", "", "Polia baixa com triângulo · pegada neutra · sentado, pés na plataforma"],
+    remada_curvada: ["remadaCurvada", "barra", "Barra livre · pegada pronada · tronco inclinado a 45°"],
+    barra_fixa: ["barraFixa", "", "Barra fixa · pegada pronada um pouco mais aberta que os ombros"],
+    pulldown: ["pulldown", "", "Polia alta com barra reta · braços quase estendidos · em pé"],
+    remada_unilateral: ["remadaUnilateral", "", "Halter · pegada neutra · mão e joelho apoiados no banco"],
+    remada_curvada_h: ["remadaCurvada", "halteres", "Halteres · pegada neutra · tronco inclinado a 45°"],
+    pullover_h: ["pullover", "", "Um halter seguro com as duas mãos · deitado no banco reto"],
+    remada_mesa: ["remadaMesa", "", "Mesa firme · mãos na borda · corpo reto embaixo dela"],
+    remada_mochila: ["remadaCurvada", "mochila", "Mochila com peso · segure pelas alças · tronco inclinado"],
+    superman: ["solo", "superman", "Colchonete · deitado de bruços · braços estendidos à frente"],
+    retracao: ["solo", "retracao", "Colchonete · de bruços · braços em W"],
+    desenvolvimento_h: ["desenvolvimento", "", "Halteres · pegada pronada · banco com encosto a 90°"],
+    desenvolvimento_m: ["desenvolvimento", "maquina", "Máquina de desenvolvimento · pegada na altura das orelhas"],
+    elevacao_lateral: ["elevacaoLateral", "", "Halteres leves · pegada neutra · braços pelas laterais (vista de frente)"],
+    elevacao_lateral_polia: ["elevacaoLateral", "polia", "Polia baixa com pegador · cabo cruzando na frente do corpo"],
+    crucifixo_inverso: ["crucifixoInverso", "", "Halteres leves · tronco inclinado · braços abrindo para os lados"],
+    face_pull: ["facePull", "", "Polia na altura do rosto com corda · puxe abrindo os cotovelos"],
+    voador_inverso: ["crucifixoInverso", "maquina", "Voador inverso · peito apoiado no encosto · braços para trás"],
+    pike: ["flexao", "pike", "Peso do corpo · quadril alto em V invertido"],
+    elevacao_garrafa: ["elevacaoFrontal", "garrafa", "Garrafas de água de 1 a 2 litros · braços à frente"],
+    ytw: ["solo", "ytw", "Colchonete · de bruços · braços formando Y, T e W"],
+    rosca_barra: ["rosca", "barra", "Barra reta ou W · pegada supinada (palmas para cima)"],
+    rosca_scott: ["rosca", "scott", "Banco Scott · braço apoiado no encosto inclinado · pegada supinada"],
+    rosca_polia: ["rosca", "polia", "Polia baixa com barra · pegada supinada · em pé"],
+    rosca_alternada: ["rosca", "halter", "Halteres · gire o punho de neutro para supinado ao subir"],
+    rosca_martelo: ["rosca", "martelo", "Halteres · pegada neutra (como segurar um martelo)"],
+    rosca_mochila: ["rosca", "mochila", "Mochila com peso · segure pela alça de cima"],
+    rosca_toalha: ["rosca", "toalha", "Toalha presa embaixo do pé · puxe para cima e segure"],
+    triceps_corda: ["tricepsPolia", "corda", "Polia alta com corda · abra a corda no fim do movimento"],
+    triceps_barra: ["tricepsPolia", "barra", "Polia alta com barra reta · pegada pronada"],
+    triceps_testa: ["testa", "", "Halteres · deitado no banco reto · cotovelos apontando para o teto"],
+    triceps_frances: ["frances", "", "Um halter seguro com as duas mãos atrás da cabeça · sentado"],
+    triceps_coice: ["coice", "", "Halter · tronco inclinado · braço colado ao corpo"],
+    mergulho_banco: ["mergulho", "", "Banco ou cadeira atrás do corpo · mãos na borda · pernas à frente"],
+    flexao_diamante: ["flexao", "", "Peso do corpo · mãos juntas formando um losango embaixo do peito"],
+    triceps_parede: ["parede", "", "Parede · antebraços apoiados · corpo inclinado"],
+    agachamento_barra: ["agachamento", "barra", "Barra livre apoiada nas costas · pés na largura dos ombros"],
+    leg_press: ["legpress", "", "Leg press 45° · pés no meio da plataforma, na largura do quadril"],
+    hack: ["agachamento", "hack", "Máquina hack · costas apoiadas no encosto inclinado"],
+    extensora: ["extensora", "", "Cadeira extensora · rolo apoiado acima do tornozelo"],
+    goblet: ["agachamento", "goblet", "Um halter em pé, seguro junto ao peito · pés levemente abertos"],
+    bulgaro: ["bulgaro", "", "Halteres · pé de trás apoiado no banco · tronco reto"],
+    passada_h: ["afundo", "halteres", "Halteres ao lado do corpo · passo largo à frente"],
+    agachamento_livre: ["agachamento", "", "Peso do corpo · braços à frente para equilibrar"],
+    sentar_levantar: ["sentar", "", "Cadeira firme atrás do corpo · braços à frente"],
+    step_up: ["degrau", "", "Degrau ou caixa firme na altura do joelho"],
+    isometria_parede: ["cadeirinha", "", "Costas na parede · joelhos a 90° · segure a posição"],
+    extensao_elastica: ["agachamento", "parcial", "Peso do corpo · desça só até metade, bem devagar"],
+    elevacao_pelvica: ["elevacaoPelvica", "barra", "Barra sobre o quadril (use uma almofada) · costas apoiadas no banco"],
+    stiff: ["dobradica", "barra", "Barra livre · pegada pronada · joelhos levemente dobrados"],
+    mesa_flexora: ["mesaFlexora", "", "Mesa flexora · deitado de bruços · rolo acima do calcanhar"],
+    cadeira_flexora: ["extensora", "flexora", "Cadeira flexora · sentado · rolo atrás do tornozelo"],
+    abdutora: ["abdutora", "", "Cadeira abdutora · almofadas por fora dos joelhos (vista de frente)"],
+    coice_polia: ["coicePolia", "", "Polia baixa com tornozeleira · perna vai para trás"],
+    rdl_h: ["dobradica", "halteres", "Halteres à frente das coxas · quadril vai para trás"],
+    elevacao_pelvica_h: ["elevacaoPelvica", "halter", "Halter sobre o quadril · costas apoiadas no banco"],
+    passada_reversa_h: ["afundo", "reverso", "Halteres · passo para trás · tronco levemente inclinado"],
+    ponte: ["elevacaoPelvica", "solo", "Colchonete · deitado de costas · pés perto do quadril"],
+    ponte_unilateral: ["elevacaoPelvica", "unilateral", "Colchonete · uma perna estendida no ar"],
+    abducao_deitada: ["abducaoLado", "", "Colchonete · deitado de lado · perna de cima sobe"],
+    quatro_apoios: ["quatroApoios", "", "Colchonete · em quatro apoios · perna dobrada sobe para trás"],
+    good_morning: ["dobradica", "bomdia", "Peso do corpo · mãos na nuca · quadril para trás"],
+    panturrilha_pe: ["panturrilha", "", "Degrau · só a ponta dos pés apoiada · mão na parede"],
+    panturrilha_sentado: ["panturrilha", "sentado", "Máquina de panturrilha sentado · almofada sobre os joelhos"],
+    panturrilha_leg: ["legpress", "panturrilha", "Leg press · pernas estendidas · só a ponta dos pés na plataforma"],
+    prancha: ["prancha", "", "Colchonete · antebraços no chão · corpo em linha reta"],
+    prancha_lateral: ["prancha", "lateral", "Colchonete · apoio em um antebraço · quadril alto"],
+    dead_bug: ["deadBug", "", "Colchonete · de costas · braço e perna opostos se estendem"],
+    crunch: ["crunch", "", "Colchonete · joelhos dobrados · mãos na nuca sem puxar o pescoço"],
+    elevacao_pernas: ["elevacaoPernas", "", "Colchonete · mãos embaixo do quadril · pernas estendidas"],
+    perdigueiro: ["quatroApoios", "perdigueiro", "Colchonete · em quatro apoios · braço e perna opostos"],
+    hollow: ["hollow", "", "Colchonete · lombar colada no chão · braços e pernas estendidos"],
+    pallof: ["pallof", "", "Polia na altura do peito · de lado para o aparelho · braços empurram à frente"],
+    abdominal_polia: ["abdominalPolia", "", "Polia alta com corda · ajoelhado · enrole o tronco"],
+    esteira_intervalada: ["corrida", "", "Esteira · alterne velocidade alta e baixa"],
+    esteira_inclinada: ["corrida", "caminhada", "Esteira com inclinação de 8 a 12% · caminhada"],
+    bike: ["bike", "", "Bicicleta ergométrica · banco na altura do quadril"],
+    remo: ["remo", "", "Remo ergômetro · pernas empurram, depois os braços puxam"],
+    escada: ["escada", "", "Simulador de escada · postura ereta"],
+    kettlebell: ["swing", "", "Kettlebell ou halter seguro com as duas mãos"],
+    polichinelo: ["polichinelo", "", "Peso do corpo · abre braços e pernas no salto (vista de frente)"],
+    polichinelo_sem: ["polichinelo", "sem", "Peso do corpo · uma perna de cada vez, sem saltar"],
+    burpee: ["burpee", "", "Peso do corpo · de pé até a prancha e volta"],
+    escalador: ["escalador", "", "Peso do corpo · posição de prancha alta"],
+    corrida_parada: ["corrida", "parado", "Peso do corpo · joelhos altos no lugar"],
+    marcha: ["corrida", "marcha", "Peso do corpo · marcha rápida no lugar"],
+    agachamento_soco: ["socos", "", "Peso do corpo · agacha, sobe e soca à frente"],
+    gato_camelo: ["quatroApoios", "gato", "Colchonete · em quatro apoios · coluna arredonda e arqueia"],
+    rotacao_toracica: ["rotacaoToracica", "", "Colchonete · deitado de lado · joelhos dobrados"],
+    noventa: ["noventa", "", "Colchonete · sentado com as duas pernas a 90°"],
+    flexor_quadril: ["flexorQuadril", "", "Colchonete · meio ajoelhado · quadril vai à frente"],
+    maior_alongamento: ["afundoRotacao", "", "Afundo com a mão no chão · gire o tronco e abra o braço"],
+    tornozelo: ["tornozelo", "", "De frente para a parede · meio ajoelhado"],
+    peitoral_parede: ["peitoralParede", "", "Parede · antebraço apoiado na altura do ombro"],
+    respiracao: ["respiracao", "", "Colchonete · de costas · mãos sobre a barriga"],
+  };
+
+  /* ---------- Montagem e animação ---------- */
+  const cache = {};
+  function preparar(id) {
+    if (cache[id]) return cache[id];
+    const e = E[id];
+    if (!e) return null;
+    const def = M[e[0]](e[1]);
+    const cfg = { coxa: def.coxa, jl: def.jl, cl: def.cl };
+    const A = resolver(def.A, cfg), B = resolver(def.B || def.A, cfg);
+    return (cache[id] = { def, A, B, legenda: e[2], fundo: cenario(def.fundo) });
+  }
+  function quadro(prep, t) {
+    const P = misturar(prep.A, prep.B, t);
+    return prep.def.frente ? desenharFrente(P, prep.def) : desenharLateral(P, prep.def);
+  }
+  function svg(id, t = 0) {
+    const prep = preparar(id);
+    if (!prep) return "";
+    return `<svg class="ilustracao" viewBox="0 0 120 96" role="img" aria-label="Ilustração do movimento" data-ilu="${id}">
+      <line x1="4" y1="${CHAO + 0.8}" x2="116" y2="${CHAO + 0.8}" stroke="var(--linha, #2B2F35)" stroke-width="1.5"/>
+      <g>${prep.fundo}</g><g class="ilu-corpo">${quadro(prep, t)}</g></svg>`;
+  }
+  const legenda = (id) => (E[id] ? E[id][2] : "");
+
+  // Um único laço de animação para todas as ilustrações visíveis
+  const reduzir = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let visiveis = new Set(), observador = null, rodando = false, ultimo = 0;
+  function laco(agora) {
+    if (!visiveis.size) { rodando = false; return; }
+    if (agora - ultimo > 33) {
+      ultimo = agora;
+      const ciclo = 2600, x = (agora % ciclo) / ciclo;
+      const t = 0.5 - 0.5 * Math.cos(x * 2 * Math.PI); // vai e volta suave
+      for (const el of visiveis) {
+        if (!el.isConnected) { visiveis.delete(el); continue; }
+        const prep = preparar(el.dataset.ilu), g = el.querySelector(".ilu-corpo");
+        if (prep && g) g.innerHTML = quadro(prep, t);
+      }
+    }
+    requestAnimationFrame(laco);
+  }
+  function animar(raiz) {
+    const els = (raiz || document).querySelectorAll("svg.ilustracao");
+    if (reduzir) { els.forEach((el) => { const p = preparar(el.dataset.ilu); el.querySelector(".ilu-corpo").innerHTML = quadro(p, 1); }); return; }
+    visiveis.clear();
+    if (observador) observador.disconnect();
+    if (!observador && "IntersectionObserver" in window) {
+      observador = new IntersectionObserver((itens) => {
+        for (const it of itens) it.isIntersecting ? visiveis.add(it.target) : visiveis.delete(it.target);
+        if (visiveis.size && !rodando) { rodando = true; requestAnimationFrame(laco); }
+      }, { rootMargin: "80px" });
+    }
+    els.forEach((el) => { if (observador) observador.observe(el); else visiveis.add(el); });
+    if (!observador && !rodando) { rodando = true; requestAnimationFrame(laco); }
+  }
+  return { svg, legenda, animar, ids: Object.keys(E), tem: (id) => !!E[id] };
+})();
+
+</script>
+<script>
+"use strict";
+
+/* ---------- Ícones (desenhados aqui para funcionar sem internet) ---------- */
+const ICONES = {
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  seta: '<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+  voltar: '<path d="M19 12H5"/><path d="m12 19-7-7 7-7"/>',
+  nova: '<path d="M21 12a9 9 0 1 1-2.6-6.4L21 8"/><path d="M21 3v5h-5"/>',
+  trocar: '<path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/>',
+  timer: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M10 2h4"/>',
+  copiar: '<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+  chama: '<path d="M12 22a7 7 0 0 0 7-7c0-4-3-6.5-4.5-9.5C13.8 7.8 12.5 9 11 9.5 11.5 7 10.5 4 8 2c.3 3-1.7 5-3 7.2A7 7 0 0 0 12 22z"/>',
+  halter: '<path d="M6.5 6.5v11"/><path d="M17.5 6.5v11"/><path d="M3.5 9.5v5"/><path d="M20.5 9.5v5"/><path d="M6.5 12h11"/>',
+  info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+  editar: '<path d="M17 3a2.85 2.85 0 0 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>',
+  compartilhar: '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4"/><path d="m15.4 6.5-6.8 4"/>',
+  pular: '<path d="m5 4 10 8-10 8V4z"/><path d="M19 5v14"/>',
+  fechar: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+  brilho: '<path d="M12 3l1.9 5.1L19 10l-5.1 1.9L12 17l-1.9-5.1L5 10l5.1-1.9z"/>',
+  vento: '<path d="M3 8h11a3 3 0 1 0-3-3"/><path d="M3 12h16a3 3 0 1 1-3 3"/><path d="M3 16h8"/>',
+  bandeira: '<path d="M4 22V4"/><path d="M4 4h13l-2 4 2 4H4"/>',
+  historico: '<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l3 2"/>',
+  ampliar: '<path d="M15 3h6v6"/><path d="M9 21H3v-6"/><path d="M21 3l-7 7"/><path d="M3 21l7-7"/>',
+  reduzir: '<path d="M4 14h6v6"/><path d="M20 10h-6V4"/><path d="M14 10l7-7"/><path d="M3 21l7-7"/>',
+  equipamento: '<path d="M14.4 14.4 9.6 9.6"/><path d="M18.7 21.5a2 2 0 1 1-2.8-2.8l-1.8 1.8a2 2 0 1 1-2.8-2.8l6.4-6.4a2 2 0 1 1 2.8 2.8l1.8-1.8a2 2 0 1 1 2.8 2.8z"/><path d="m21.5 21.5-1.4-1.4"/><path d="M3.9 3.9 2.5 2.5"/><path d="M6.4 12.8a2 2 0 1 1-2.8-2.8l1.8-1.8a2 2 0 1 1-2.8-2.8l2.8-2.8a2 2 0 1 1 2.8 2.8l1.8-1.8a2 2 0 1 1 2.8 2.8z"/>',
+};
+const ic = (n) => `<svg class="i" viewBox="0 0 24 24" aria-hidden="true">${ICONES[n] || ""}</svg>`;
+
+/* ---------- Datas ---------- */
+const pad = (n) => String(n).padStart(2, "0");
+const chave = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+const deChave = (k) => { const [a, m, d] = k.split("-").map(Number); return new Date(a, m - 1, d); };
+const somar = (k, n) => { const d = deChave(k); d.setDate(d.getDate() + n); return chave(d); };
+const segunda = (k) => { const d = deChave(k); d.setDate(d.getDate() - ((d.getDay() + 6) % 7)); return chave(d); };
+const DIAS = ["domingo", "segunda", "terça", "quarta", "quinta", "sexta", "sábado"];
+const MESES = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+
+/* ---------- Sorteio reprodutível: mesma pessoa, mesmo dia, mesmas respostas = mesma ficha ---------- */
+function hash(s) { let h = 2166136261; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+function gerador(semente) {
+  let a = semente >>> 0;
+  return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+}
+function embaralhar(lista, rnd) { const l = lista.slice(); for (let i = l.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [l[i], l[j]] = [l[j], l[i]]; } return l; }
+
+/* ---------- Grupos musculares (cores das anilhas olímpicas) ---------- */
+const GRUPOS = {
+  peito: { nome: "Peito", cor: "var(--azul)" },
+  costas: { nome: "Costas", cor: "var(--amarela)" },
+  ombros: { nome: "Ombros", cor: "var(--azul)" },
+  biceps: { nome: "Bíceps", cor: "var(--amarela)" },
+  triceps: { nome: "Tríceps", cor: "var(--azul)" },
+  quadriceps: { nome: "Quadríceps", cor: "var(--vermelha)" },
+  posterior: { nome: "Glúteos e posterior", cor: "var(--vermelha)" },
+  panturrilha: { nome: "Panturrilha", cor: "var(--vermelha)" },
+  core: { nome: "Abdômen", cor: "var(--verde)" },
+  cardio: { nome: "Cardio", cor: "var(--brasa)" },
+  mobilidade: { nome: "Mobilidade", cor: "var(--branca)" },
+};
+// Como a pessoa descreve o que treinou -> grupos internos
+const GRUPOS_PESSOA = [
+  ["peito", "Peito", ["peito"]],
+  ["costas", "Costas", ["costas"]],
+  ["ombros", "Ombros", ["ombros"]],
+  ["bracos", "Braços", ["biceps", "triceps"]],
+  ["pernas", "Pernas (quadríceps)", ["quadriceps", "panturrilha"]],
+  ["posterior", "Glúteos e posterior", ["posterior"]],
+  ["core", "Abdômen", ["core"]],
+  ["cardio", "Cardio", ["cardio"]],
+];
+const paraInternos = (lista) => [...new Set(lista.flatMap((id) => (GRUPOS_PESSOA.find((g) => g[0] === id) || [0, 0, []])[2]))];
+const paraPessoa = (internos) => GRUPOS_PESSOA.filter((g) => g[2].some((x) => internos.includes(x))).map((g) => g[0]);
+
+/* ---------- Banco de exercícios ----------
+   [id, nome, grupo, equipamento, categoria (C composto / I isolado), evitar se, dica, marcas]
+   marcas: tempo (feito por tempo), gluteo (ênfase em glúteo), post (ombro posterior), leve (cardio leve) */
+const EXERCICIOS = [
+  // Peito
+  ["supino_reto", "Supino reto com barra", "peito", "academia", "C", ["ombro"], "Escápulas presas no banco, pés firmes, barra descendo até a linha do peito."],
+  ["supino_inclinado_h", "Supino inclinado com halteres", "peito", "halteres", "C", ["ombro"], "Banco a 30°; desça os halteres até a lateral do peito."],
+  ["supino_halteres", "Supino reto com halteres", "peito", "halteres", "C", ["ombro"], "Halteres descem controlados; não bata um no outro em cima."],
+  ["supino_maquina", "Supino na máquina", "peito", "academia", "C", [], "Ajuste o banco para a pegada ficar na linha do peito."],
+  ["crucifixo_maquina", "Voador (peck deck)", "peito", "academia", "I", ["ombro"], "Cotovelos levemente dobrados; feche contraindo o peito."],
+  ["crossover", "Crossover na polia", "peito", "academia", "I", ["ombro"], "Um passo à frente, tronco levemente inclinado, mãos se encontram embaixo."],
+  ["crucifixo_h", "Crucifixo com halteres", "peito", "halteres", "I", ["ombro"], "Abra até sentir alongar, sem passar a linha do ombro."],
+  ["flexao", "Flexão de braço", "peito", "nenhum", "C", ["punho", "ombro"], "Corpo em prancha; cotovelos a uns 45° do tronco."],
+  ["flexao_inclinada", "Flexão inclinada (mãos no sofá ou banco)", "peito", "nenhum", "C", [], "Quanto mais alto o apoio, mais fácil. Corpo sempre reto."],
+  ["flexao_aberta", "Flexão com pegada aberta, pausa embaixo", "peito", "nenhum", "I", ["punho", "ombro"], "Segure 1 segundo perto do chão para sentir o peito."],
+  // Costas
+  ["puxada_frontal", "Puxada frontal", "costas", "academia", "C", ["ombro"], "Puxe a barra até o queixo levando os cotovelos para baixo e para trás."],
+  ["remada_baixa", "Remada baixa no triângulo", "costas", "academia", "C", [], "Peito aberto; traga o triângulo até o umbigo."],
+  ["remada_curvada", "Remada curvada com barra", "costas", "academia", "C", ["lombar"], "Tronco a 45°, coluna neutra, barra até a linha do umbigo."],
+  ["barra_fixa", "Barra fixa (ou graviton)", "costas", "academia", "C", ["ombro"], "Se não conseguir ainda, use o graviton ou elástico de assistência."],
+  ["pulldown", "Pulldown com braços estendidos", "costas", "academia", "I", [], "Braços quase retos; leve a barra até as coxas."],
+  ["remada_unilateral", "Remada unilateral com halter", "costas", "halteres", "C", [], "Mão e joelho no banco; puxe o halter até o quadril."],
+  ["remada_curvada_h", "Remada curvada com halteres", "costas", "halteres", "C", ["lombar"], "Coluna neutra; cotovelos rentes ao corpo."],
+  ["pullover_h", "Pullover com halter", "costas", "halteres", "I", ["ombro"], "Deitado no banco, leve o halter para trás da cabeça com braços semiflexionados."],
+  ["remada_mesa", "Remada invertida embaixo da mesa", "costas", "nenhum", "C", [], "Deite sob uma mesa firme, segure a borda e puxe o peito até ela."],
+  ["remada_mochila", "Remada curvada com mochila", "costas", "nenhum", "C", ["lombar"], "Encha a mochila com livros ou garrafas para dar carga."],
+  ["superman", "Super-homem no solo", "costas", "nenhum", "I", ["lombar"], "De bruços, eleve braços e pernas e segure 2 segundos.", "tempo"],
+  ["retracao", "Retração escapular deitado de bruços", "costas", "nenhum", "I", [], "Braços em W; aperte as escápulas e segure 2 segundos."],
+  // Ombros
+  ["desenvolvimento_h", "Desenvolvimento com halteres", "ombros", "halteres", "C", ["ombro"], "Sentado com costas apoiadas; empurre até quase estender os braços."],
+  ["desenvolvimento_m", "Desenvolvimento na máquina", "ombros", "academia", "C", ["ombro"], "Pegada na altura das orelhas no início do movimento."],
+  ["elevacao_lateral", "Elevação lateral com halteres", "ombros", "halteres", "I", ["ombro"], "Suba até a linha do ombro, cotovelos levemente dobrados, sem balanço."],
+  ["elevacao_lateral_polia", "Elevação lateral na polia", "ombros", "academia", "I", ["ombro"], "Cabo cruzando na frente do corpo; tensão contínua."],
+  ["crucifixo_inverso", "Crucifixo inverso com halteres", "ombros", "halteres", "I", [], "Tronco inclinado; abra os braços apertando a parte de trás do ombro.", "post"],
+  ["face_pull", "Face pull na polia", "ombros", "academia", "I", [], "Corda na altura do rosto; puxe abrindo os cotovelos.", "post"],
+  ["voador_inverso", "Voador inverso na máquina", "ombros", "academia", "I", [], "Peito no apoio; abra os braços sem encolher os ombros.", "post"],
+  ["pike", "Flexão pike (quadril alto)", "ombros", "nenhum", "C", ["ombro", "punho"], "Corpo em V invertido; desça a cabeça entre as mãos."],
+  ["elevacao_garrafa", "Elevação lateral com garrafas", "ombros", "nenhum", "I", ["ombro"], "Garrafas de 1 a 2 litros; suba devagar até a linha do ombro."],
+  ["ytw", "Y-T-W deitado de bruços", "ombros", "nenhum", "I", [], "Forme as letras com os braços, segurando 2 segundos em cada.", "post"],
+  // Bíceps
+  ["rosca_barra", "Rosca direta com barra", "biceps", "academia", "I", [], "Cotovelos colados ao corpo; desça em 3 segundos."],
+  ["rosca_scott", "Rosca Scott na máquina", "biceps", "academia", "I", [], "Braço todo apoiado; não estenda o cotovelo de forma brusca."],
+  ["rosca_polia", "Rosca na polia baixa", "biceps", "academia", "I", [], "Tensão contínua; suba até a altura do peito."],
+  ["rosca_alternada", "Rosca alternada com halteres", "biceps", "halteres", "I", [], "Gire o punho para cima enquanto sobe."],
+  ["rosca_martelo", "Rosca martelo", "biceps", "halteres", "I", [], "Pegada neutra (como segurar um martelo)."],
+  ["rosca_mochila", "Rosca com mochila", "biceps", "nenhum", "I", [], "Segure pelas alças; cotovelos parados."],
+  ["rosca_toalha", "Rosca isométrica com toalha", "biceps", "nenhum", "I", [], "Pise na toalha e puxe para cima com força, segurando.", "tempo"],
+  // Tríceps
+  ["triceps_corda", "Tríceps na polia com corda", "triceps", "academia", "I", [], "Cotovelos parados; abra a corda embaixo."],
+  ["triceps_barra", "Tríceps na polia com barra", "triceps", "academia", "I", [], "Ombros baixos; estenda totalmente o cotovelo."],
+  ["triceps_testa", "Tríceps testa com halteres", "triceps", "halteres", "I", ["ombro"], "Cotovelos apontados para o teto; desça os halteres ao lado da cabeça."],
+  ["triceps_frances", "Tríceps francês com halter", "triceps", "halteres", "I", ["ombro"], "Halter atrás da cabeça; cotovelos próximos."],
+  ["triceps_coice", "Tríceps coice com halter", "triceps", "halteres", "I", [], "Tronco inclinado; estenda o braço para trás."],
+  ["mergulho_banco", "Mergulho no banco ou cadeira", "triceps", "nenhum", "I", ["ombro", "punho"], "Desça até os cotovelos formarem 90°."],
+  ["flexao_diamante", "Flexão fechada (diamante)", "triceps", "nenhum", "I", ["punho", "ombro"], "Mãos juntas embaixo do peito; pode apoiar os joelhos."],
+  ["triceps_parede", "Tríceps na parede", "triceps", "nenhum", "I", [], "Antebraços na parede; empurre estendendo os cotovelos."],
+  // Quadríceps
+  ["agachamento_barra", "Agachamento livre com barra", "quadriceps", "academia", "C", ["joelho", "lombar"], "Desça até onde mantém a coluna neutra; joelhos na direção dos pés."],
+  ["leg_press", "Leg press 45°", "quadriceps", "academia", "C", [], "Lombar sempre apoiada; não trave os joelhos em cima."],
+  ["hack", "Agachamento no hack", "quadriceps", "academia", "C", ["joelho"], "Pés no meio da plataforma; desça controlando."],
+  ["extensora", "Cadeira extensora", "quadriceps", "academia", "I", ["joelho"], "Segure 1 segundo em cima e desça em 3."],
+  ["goblet", "Agachamento goblet", "quadriceps", "halteres", "C", ["joelho"], "Halter junto ao peito; cotovelos passam por dentro dos joelhos."],
+  ["bulgaro", "Agachamento búlgaro", "quadriceps", "halteres", "C", ["joelho"], "Pé de trás no banco; desça reto, sem jogar o joelho da frente para dentro."],
+  ["passada_h", "Passada com halteres", "quadriceps", "halteres", "C", ["joelho"], "Passo largo; joelho de trás quase encosta no chão."],
+  ["agachamento_livre", "Agachamento com peso do corpo", "quadriceps", "nenhum", "C", ["joelho"], "Braços à frente para equilibrar; desça em 2 segundos."],
+  ["sentar_levantar", "Sentar e levantar da cadeira", "quadriceps", "nenhum", "C", [], "Encoste de leve no assento e suba sem usar as mãos."],
+  ["step_up", "Subida no degrau", "quadriceps", "nenhum", "C", ["joelho"], "Use um degrau firme; empurre com a perna de cima."],
+  ["isometria_parede", "Cadeirinha na parede", "quadriceps", "nenhum", "I", ["joelho"], "Costas na parede, joelhos a 90°, segure.", "tempo"],
+  ["extensao_elastica", "Agachamento parcial lento", "quadriceps", "nenhum", "I", [], "Desça só até onde não incomoda, em 4 segundos."],
+  // Glúteos e posterior
+  ["elevacao_pelvica", "Elevação pélvica com barra", "posterior", "academia", "C", [], "Costas no banco; suba o quadril e contraia o glúteo em cima.", "gluteo"],
+  ["stiff", "Stiff com barra", "posterior", "academia", "C", ["lombar"], "Joelhos levemente dobrados; desça a barra rente às pernas."],
+  ["mesa_flexora", "Mesa flexora", "posterior", "academia", "I", [], "Quadril colado no banco; desça em 3 segundos."],
+  ["cadeira_flexora", "Cadeira flexora", "posterior", "academia", "I", [], "Ajuste o rolo acima do calcanhar."],
+  ["abdutora", "Cadeira abdutora", "posterior", "academia", "I", [], "Tronco levemente à frente para focar no glúteo.", "gluteo"],
+  ["coice_polia", "Coice de glúteo na polia", "posterior", "academia", "I", [], "Perna estendida para trás sem arquear a lombar.", "gluteo"],
+  ["rdl_h", "Levantamento terra romeno com halteres", "posterior", "halteres", "C", ["lombar"], "Quadril vai para trás; halteres descem rente às pernas."],
+  ["elevacao_pelvica_h", "Elevação pélvica com halter", "posterior", "halteres", "C", [], "Halter apoiado no quadril; pausa de 1 segundo em cima.", "gluteo"],
+  ["passada_reversa_h", "Afundo reverso com halteres", "posterior", "halteres", "I", ["joelho"], "Passo para trás; tronco levemente inclinado para focar o glúteo.", "gluteo"],
+  ["ponte", "Ponte de glúteo", "posterior", "nenhum", "C", [], "Pés perto do quadril; suba e contraia o glúteo.", "gluteo"],
+  ["ponte_unilateral", "Ponte de glúteo unilateral", "posterior", "nenhum", "I", [], "Uma perna estendida; suba sem girar o quadril.", "gluteo"],
+  ["abducao_deitada", "Abdução deitado de lado", "posterior", "nenhum", "I", [], "Perna de cima sobe levemente para trás.", "gluteo"],
+  ["quatro_apoios", "Glúteo em quatro apoios", "posterior", "nenhum", "I", ["punho"], "Joelho dobrado; empurre o pé em direção ao teto.", "gluteo"],
+  ["good_morning", "Bom-dia com peso do corpo", "posterior", "nenhum", "I", ["lombar"], "Mãos na nuca; incline o tronco levando o quadril para trás."],
+  // Panturrilha
+  ["panturrilha_pe", "Panturrilha em pé", "panturrilha", "nenhum", "I", [], "Na borda de um degrau; desça bem e suba na ponta dos pés."],
+  ["panturrilha_sentado", "Panturrilha sentado na máquina", "panturrilha", "academia", "I", [], "Pausa de 1 segundo em cima."],
+  ["panturrilha_leg", "Panturrilha no leg press", "panturrilha", "academia", "I", [], "Só a ponta dos pés na plataforma; amplitude total."],
+  // Abdômen
+  ["prancha", "Prancha frontal", "core", "nenhum", "I", ["ombro"], "Glúteo e abdômen contraídos; não deixe o quadril cair.", "tempo"],
+  ["prancha_lateral", "Prancha lateral", "core", "nenhum", "I", ["ombro"], "Quadril alto, corpo em linha reta.", "tempo"],
+  ["dead_bug", "Dead bug", "core", "nenhum", "I", [], "Lombar colada no chão; estenda braço e perna opostos devagar."],
+  ["crunch", "Abdominal curto", "core", "nenhum", "I", ["lombar"], "Suba só até as escápulas saírem do chão; expire subindo."],
+  ["elevacao_pernas", "Elevação de pernas deitado", "core", "nenhum", "I", ["lombar"], "Mãos embaixo do quadril; desça as pernas sem arquear."],
+  ["perdigueiro", "Perdigueiro (bird dog)", "core", "nenhum", "I", ["punho"], "Estenda braço e perna opostos e segure 2 segundos."],
+  ["hollow", "Canoinha (hollow hold)", "core", "nenhum", "I", ["lombar"], "Lombar no chão; braços e pernas estendidos.", "tempo"],
+  ["pallof", "Pallof press na polia", "core", "academia", "I", [], "De lado para a polia; empurre o cabo à frente sem girar o tronco."],
+  ["abdominal_polia", "Abdominal ajoelhado na polia", "core", "academia", "I", ["lombar"], "Enrole o tronco trazendo os cotovelos aos joelhos."],
+  // Cardio
+  ["esteira_intervalada", "Corrida intervalada na esteira", "cardio", "academia", "C", ["joelho", "impacto"], "Alterne ritmo forte e leve.", "tempo"],
+  ["esteira_inclinada", "Caminhada inclinada na esteira", "cardio", "academia", "C", [], "Inclinação de 8 a 12%; sem segurar no apoio.", "tempo leve"],
+  ["bike", "Bicicleta ergométrica", "cardio", "academia", "C", [], "Carga em que você consegue falar frases curtas.", "tempo leve"],
+  ["remo", "Remo ergômetro", "cardio", "academia", "C", ["lombar"], "Empurre com as pernas primeiro, depois puxe com os braços.", "tempo"],
+  ["escada", "Simulador de escada", "cardio", "academia", "C", ["joelho"], "Postura ereta; não se apoie no corrimão.", "tempo"],
+  ["kettlebell", "Swing com kettlebell ou halter", "cardio", "halteres", "C", ["lombar"], "O quadril empurra o peso; braços só guiam.", "tempo"],
+  ["polichinelo", "Polichinelo", "cardio", "nenhum", "C", ["joelho", "impacto"], "Aterrisse suave na ponta dos pés.", "tempo"],
+  ["polichinelo_sem", "Polichinelo sem salto", "cardio", "nenhum", "C", [], "Abra uma perna de cada vez subindo os braços.", "tempo leve"],
+  ["burpee", "Burpee", "cardio", "nenhum", "C", ["joelho", "punho", "ombro", "lombar", "impacto"], "No seu ritmo; qualidade antes de velocidade.", "tempo"],
+  ["escalador", "Mountain climber", "cardio", "nenhum", "C", ["punho", "ombro", "impacto"], "Quadril baixo; joelhos alternados rápido.", "tempo"],
+  ["corrida_parada", "Corrida estacionária", "cardio", "nenhum", "C", ["joelho", "impacto"], "Joelhos altos e braços acompanhando.", "tempo"],
+  ["marcha", "Marcha rápida no lugar", "cardio", "nenhum", "C", [], "Eleve bem os joelhos; mantenha o ritmo.", "tempo leve"],
+  ["agachamento_soco", "Agachamento com socos à frente", "cardio", "nenhum", "C", ["joelho"], "Agache, suba e solte dois socos.", "tempo"],
+  // Mobilidade
+  ["gato_camelo", "Gato e camelo", "mobilidade", "nenhum", "I", [], "Movimento lento, vértebra por vértebra."],
+  ["rotacao_toracica", "Rotação torácica deitado de lado", "mobilidade", "nenhum", "I", [], "Abra o braço como um livro, seguindo com o olhar."],
+  ["noventa", "Mobilidade de quadril 90/90", "mobilidade", "nenhum", "I", ["joelho"], "Gire as pernas de um lado para o outro sem usar as mãos."],
+  ["flexor_quadril", "Alongamento do flexor do quadril", "mobilidade", "nenhum", "I", [], "Meio ajoelhado; contraia o glúteo e leve o quadril à frente.", "tempo"],
+  ["maior_alongamento", "Alongamento do afundo com rotação", "mobilidade", "nenhum", "I", ["joelho"], "Afundo, mão no chão e gire o tronco abrindo o braço."],
+  ["tornozelo", "Mobilidade de tornozelo na parede", "mobilidade", "nenhum", "I", [], "Leve o joelho até a parede sem tirar o calcanhar do chão."],
+  ["peitoral_parede", "Alongamento de peitoral na parede", "mobilidade", "nenhum", "I", [], "Antebraço na parede; gire o corpo para o lado oposto.", "tempo"],
+  ["respiracao", "Respiração diafragmática", "mobilidade", "nenhum", "I", [], "Inspire 4 s enchendo a barriga, solte em 6 s.", "tempo"],
+].map(([id, nome, grupo, equip, cat, evitar, dica, marcas = ""]) => ({ id, nome, grupo, equip, cat, evitar, dica, tempo: marcas.includes("tempo"), gluteo: marcas.includes("gluteo"), post: marcas.includes("post"), leve: marcas.includes("leve") }));
+const POR_ID = Object.fromEntries(EXERCICIOS.map((e) => [e.id, e]));
+
+/* ---------- Tipos de treino ----------
+   vagas: [grupo, filtro] — C composto, I isolado, G ênfase glúteo, P ombro posterior, L cardio leve, * qualquer */
+const TIPOS = {
+  empurrar: { nome: "Empurrar", sub: "Peito · Ombros · Tríceps", grupos: ["peito", "ombros", "triceps"], parte: "sup",
+    vagas: [["peito", "C"], ["peito", "C"], ["ombros", "C"], ["ombros", "S"], ["triceps", "I"], ["peito", "I"], ["triceps", "I"], ["core", "*"]] },
+  puxar: { nome: "Puxar", sub: "Costas · Bíceps · Ombro posterior", grupos: ["costas", "biceps"], parte: "sup",
+    vagas: [["costas", "C"], ["costas", "C"], ["costas", "*"], ["ombros", "P"], ["biceps", "I"], ["biceps", "I"], ["core", "*"], ["costas", "I"]] },
+  pernas: { nome: "Pernas", sub: "Quadríceps · Posterior · Panturrilha", grupos: ["quadriceps", "posterior", "panturrilha"], parte: "inf",
+    vagas: [["quadriceps", "C"], ["posterior", "C"], ["quadriceps", "C"], ["posterior", "I"], ["quadriceps", "I"], ["panturrilha", "*"], ["core", "*"], ["posterior", "I"]] },
+  superiores: { nome: "Superiores", sub: "Peito · Costas · Ombros · Braços", grupos: ["peito", "costas", "ombros", "biceps", "triceps"], parte: "sup",
+    vagas: [["peito", "C"], ["costas", "C"], ["ombros", "C"], ["costas", "C"], ["peito", "I"], ["biceps", "I"], ["triceps", "I"], ["core", "*"]] },
+  inferiores: { nome: "Inferiores", sub: "Quadríceps · Glúteos · Posterior", grupos: ["quadriceps", "posterior", "panturrilha"], parte: "inf",
+    vagas: [["quadriceps", "C"], ["posterior", "C"], ["posterior", "G"], ["quadriceps", "I"], ["posterior", "I"], ["panturrilha", "*"], ["core", "*"], ["quadriceps", "C"]] },
+  gluteos: { nome: "Glúteos", sub: "Glúteos · Posterior · Quadríceps", grupos: ["posterior", "quadriceps"], parte: "inf",
+    vagas: [["posterior", "G"], ["quadriceps", "C"], ["posterior", "C"], ["posterior", "G"], ["posterior", "I"], ["quadriceps", "I"], ["core", "*"], ["panturrilha", "*"]] },
+  corpo: { nome: "Corpo todo", sub: "Todos os grandes grupos", grupos: ["quadriceps", "peito", "costas", "posterior", "ombros"], parte: "todo", leve: true,
+    vagas: [["quadriceps", "C"], ["peito", "C"], ["costas", "C"], ["posterior", "C"], ["ombros", "C"], ["core", "*"], ["biceps", "I"], ["triceps", "I"]] },
+  condicionamento: { nome: "Condicionamento", sub: "Circuito metabólico", grupos: ["cardio"], parte: "todo", circuito: true,
+    vagas: [["cardio", "*"], ["quadriceps", "C"], ["peito", "C"], ["cardio", "*"], ["costas", "C"], ["posterior", "C"], ["core", "*"], ["cardio", "*"]] },
+  recuperacao: { nome: "Recuperação ativa", sub: "Mobilidade · Core · Cardio leve", grupos: [], parte: "rec",
+    vagas: [["mobilidade", "*"], ["mobilidade", "*"], ["core", "*"], ["mobilidade", "*"], ["cardio", "L"], ["mobilidade", "*"], ["core", "*"], ["mobilidade", "*"]] },
+};
+const AUXILIARES = ["triceps", "biceps", "panturrilha"];
+const BASE_OBJETIVO = {
+  hipertrofia: { empurrar: 3, puxar: 3, pernas: 3, superiores: 2.6, inferiores: 2.6, gluteos: 2.2, corpo: 2, condicionamento: 0.4, recuperacao: 0 },
+  forca: { empurrar: 2.8, puxar: 2.8, pernas: 3, superiores: 2.6, inferiores: 2.6, gluteos: 1.6, corpo: 2.8, condicionamento: 0.2, recuperacao: 0 },
+  emagrecer: { empurrar: 1.6, puxar: 1.6, pernas: 2.2, superiores: 2.1, inferiores: 2.6, gluteos: 2.1, corpo: 3, condicionamento: 3, recuperacao: 0.2 },
+  condicionamento: { empurrar: 1.3, puxar: 1.3, pernas: 1.6, superiores: 1.7, inferiores: 1.8, gluteos: 1.4, corpo: 3, condicionamento: 3.5, recuperacao: 0.4 },
+  saude: { empurrar: 1.2, puxar: 1.2, pernas: 1.4, superiores: 2.1, inferiores: 2.1, gluteos: 1.6, corpo: 3, condicionamento: 2, recuperacao: 1.6 },
+};
+const OBJETIVOS = { hipertrofia: "ganhar massa muscular", forca: "ganhar força", emagrecer: "perder gordura", condicionamento: "melhorar o fôlego", saude: "saúde e bem-estar" };
+const NIVEIS = { iniciante: "Iniciante", intermediario: "Intermediário", avancado: "Avançado" };
+const LIMITES = { joelho: "os joelhos", lombar: "a lombar", ombro: "os ombros", punho: "os punhos", impacto: "impacto e saltos" };
+
+/* ---------- Memória no aparelho (pode não existir em alguns visualizadores) ---------- */
+const CHAVE = "ficha-do-dia:v1";
+let memoria = { perfil: null, historico: [] };
+try { const t = localStorage.getItem(CHAVE); if (t) memoria = { perfil: null, historico: [], ...JSON.parse(t) }; } catch (e) { /* sem memória: tudo funciona, só não lembra */ }
+function guardar() { try { localStorage.setItem(CHAVE, JSON.stringify(memoria)); } catch (e) { /* sem memória */ } }
+const hoje = () => chave();
+function historicoDaSemana() {
+  const ini = segunda(hoje()), h = hoje();
+  return memoria.historico.filter((x) => x.data >= ini && x.data <= h);
+}
+function gruposRecentes() {
+  const h = hoje(), d2 = somar(h, -2);
+  return [...new Set(memoria.historico.filter((x) => x.data >= d2 && x.data <= h).flatMap((x) => x.grupos))];
+}
+
+/* ---------- Perguntas ---------- */
+const OPCOES_GRUPOS = GRUPOS_PESSOA.map(([id, nome, internos]) => [id, nome, "", GRUPOS[internos[0]].cor]);
+const PERGUNTAS = {
+  nome: { tipo: "texto", titulo: "Como podemos te chamar?", sub: "Opcional. O nome aparece no topo da sua ficha." },
+  genero: { tipo: "unica", titulo: "Com qual gênero você se identifica?", sub: "Usamos só para sugerir uma ênfase. No fim, quem escolhe é você.",
+    opcoes: [["feminino", "Feminino"], ["masculino", "Masculino"], ["outro", "Prefiro não dizer"]] },
+  nivel: { tipo: "unica", titulo: "Qual é a sua experiência com treino de força?", sub: "Isso define séries, repetições e a complexidade dos exercícios.",
+    opcoes: [["iniciante", "Iniciante", "Menos de 6 meses, ou voltando agora"], ["intermediario", "Intermediário", "De 6 meses a 2 anos treinando"], ["avancado", "Avançado", "Mais de 2 anos, com constância"]] },
+  objetivo: { tipo: "unica", titulo: "Qual é o seu objetivo principal?", sub: "Muda o tipo de ficha e a forma de executar.",
+    opcoes: [["hipertrofia", "Ganhar massa muscular", "Hipertrofia"], ["forca", "Ficar mais forte", "Cargas maiores, menos repetições"], ["emagrecer", "Perder gordura", "Mais gasto calórico"], ["condicionamento", "Ter mais fôlego", "Circuitos e cardio"], ["saude", "Saúde e bem-estar", "Treino equilibrado e seguro"]] },
+  local: { tipo: "unica", titulo: "Onde você vai treinar?", sub: "Só sugerimos exercícios que você consegue fazer aí.",
+    opcoes: [["academia", "Academia", "Máquinas, polias e pesos livres"], ["halteres", "Casa com halteres", "Halteres, kettlebell ou banco"], ["casa", "Casa sem equipamento", "Só o peso do corpo"]] },
+  limitacoes: { tipo: "multi", titulo: "Alguma parte do corpo pede cuidado?", sub: "Evitamos os exercícios que forçam essas regiões.", nenhum: "Nenhuma",
+    opcoes: [["joelho", "Joelhos"], ["lombar", "Lombar / coluna"], ["ombro", "Ombros"], ["punho", "Punhos"], ["impacto", "Prefiro sem saltos"]] },
+  enfase: { tipo: "unica", titulo: "Quer dar ênfase em alguma região?", sub: "Deixamos uma sugestão marcada. Mude se quiser.",
+    opcoes: [["inferiores", "Pernas e glúteos"], ["superiores", "Peito, costas e braços"], ["equilibrado", "Equilibrado"]] },
+  tempo: { tipo: "grade", titulo: "Quanto tempo você tem hoje?", sub: "Contando aquecimento e alongamento.",
+    opcoes: [[20, "20", "min"], [30, "30", "min"], [45, "45", "min"], [60, "60", "min"], [75, "75+", "min"]] },
+  energia: { tipo: "unica", titulo: "Como está sua energia hoje?", sub: "Seja sincero. A ficha se ajusta ao seu dia.",
+    opcoes: [["baixa", "Baixa", "Dormi mal, estou cansado ou dolorido"], ["normal", "Normal", "Um dia comum"], ["alta", "Alta", "Descansado e com disposição"]] },
+  semana: { tipo: "grade", titulo: "Quantos treinos você já fez esta semana?", sub: "Contando desde segunda-feira.",
+    opcoes: [[0, "0", "nenhum"], [1, "1", "treino"], [2, "2", "treinos"], [3, "3", "treinos"], [4, "4", "treinos"], [5, "5+", "treinos"]] },
+  recentes: { tipo: "multi", titulo: "O que você treinou nos últimos 2 dias?", sub: "Esses músculos ainda estão se recuperando, então ficam de fora hoje.", nenhum: "Nada", opcoes: OPCOES_GRUPOS },
+  semanaGrupos: { tipo: "multi", titulo: "E antes disso, nesta semana?", sub: "Damos prioridade ao que ainda não foi treinado.", nenhum: "Nada além disso", opcoes: OPCOES_GRUPOS },
+};
+const PERFIL_CAMPOS = ["nome", "genero", "nivel", "objetivo", "local", "limitacoes", "enfase"];
+const DIA_CAMPOS = ["tempo", "energia", "semana", "recentes", "semanaGrupos"];
+
+/* ---------- Estado da tela ---------- */
+const ui = { tela: "inicio", fila: [], idx: 0, r: {}, prefill: {}, ficha: null, variacao: 0, vistos: [], tipoForcado: null, feitos: {}, descanso: null, zoom: {} };
+
+function iniciarPerguntas(soDia) {
+  const p = memoria.perfil;
+  ui.r = soDia && p ? { ...p } : { ...(p || {}) };
+  if (!ui.r.limitacoes) ui.r.limitacoes = [];
+  // Pré-preenche com o histórico salvo neste aparelho
+  ui.prefill = {};
+  const semana = historicoDaSemana();
+  if (memoria.historico.length) {
+    const rec = paraPessoa(gruposRecentes());
+    const resto = paraPessoa(semana.flatMap((x) => x.grupos)).filter((g) => !rec.includes(g));
+    ui.r.semana = Math.min(5, semana.length);
+    ui.r.recentes = rec;
+    ui.r.semanaGrupos = resto;
+    ui.prefill = { semana: true, recentes: true, semanaGrupos: true };
+  } else {
+    delete ui.r.semana; ui.r.recentes = []; ui.r.semanaGrupos = [];
+  }
+  delete ui.r.tempo; delete ui.r.energia;
+  ui.fila = soDia && p ? DIA_CAMPOS.slice() : [...PERFIL_CAMPOS, ...DIA_CAMPOS];
+  ui.idx = 0; ui.variacao = 0; ui.vistos = []; ui.tipoForcado = null;
+  ui.tela = "pergunta";
+  pularSeNecessario();
+  render(); topo();
+}
+function pularSeNecessario() {
+  // Sem treinos na semana, não faz sentido perguntar o que foi treinado antes de ontem
+  while (ui.fila[ui.idx] === "semanaGrupos" && ui.r.semana === 0) ui.idx++;
+}
+function respondida(campo) {
+  const q = PERGUNTAS[campo], v = ui.r[campo];
+  if (q.tipo === "texto") return true;
+  if (q.tipo === "multi") return Array.isArray(v) && (v.length > 0 || ui.r[campo + "_nada"] || ui.prefill[campo]);
+  return v !== undefined && v !== null;
+}
+function avancar() {
+  ui.idx++;
+  pularSeNecessario();
+  if (ui.idx >= ui.fila.length) return montarFicha();
+  render(); topo();
+}
+
+/* ---------- Escolha do tipo de treino ---------- */
+function pontuarTipos(r) {
+  const recentes = paraInternos(r.recentes || []);
+  const semana = paraInternos(r.semanaGrupos || []);
+  const ultimo = memoria.historico.length ? memoria.historico[memoria.historico.length - 1] : null;
+  const ontem = somar(hoje(), -1);
+  const base = BASE_OBJETIVO[r.objetivo] || BASE_OBJETIVO.saude;
+  const rnd = gerador(hash(hoje() + "|tipos|" + ui.variacao));
+  return Object.keys(TIPOS).map((id) => {
+    const t = TIPOS[id];
+    let s = base[id];
+    // Músculos auxiliares (tríceps no empurrar, bíceps no puxar, panturrilha nas pernas) contam metade
+    const peso = (g) => (AUXILIARES.includes(g) ? 0.5 : 1);
+    const totalPeso = t.grupos.reduce((a, g) => a + peso(g), 0) || 1;
+    const fracRec = t.grupos.filter((g) => recentes.includes(g)).reduce((a, g) => a + peso(g), 0) / totalPeso;
+    const fracSem = t.grupos.filter((g) => semana.includes(g)).reduce((a, g) => a + peso(g), 0) / totalPeso;
+    s -= (t.leve ? 4 : 9) * fracRec;
+    s -= 3.5 * fracSem;
+    if (r.nivel === "iniciante") { if (id === "corpo") s += 1; if (id === "superiores" || id === "inferiores") s += 0.5; if (["empurrar", "puxar", "pernas"].includes(id)) s -= 0.6; }
+    if (r.nivel === "avancado" && ["empurrar", "puxar", "pernas"].includes(id)) s += 0.5;
+    if (r.enfase === "inferiores" && t.parte === "inf") s += id === "gluteos" ? 1.4 : 0.9;
+    if (r.enfase === "superiores" && t.parte === "sup") s += 0.9;
+    if (r.energia === "baixa") { if (id === "recuperacao") s += 2.6; if (id === "condicionamento") s -= 1; }
+    if (r.energia === "alta" && id === "condicionamento") s += 0.4;
+    if (r.tempo <= 20) { if (id === "corpo" || id === "condicionamento") s += 1; if (["empurrar", "puxar", "pernas"].includes(id)) s -= 0.6; }
+    if (r.semana >= 5 && r.energia !== "alta" && id === "recuperacao") s += 2;
+    if (ultimo && ultimo.data === ontem && ultimo.tipo === id) s -= 2;
+    s += rnd() * 0.9;
+    return { id, s, recuperando: fracRec >= 0.5 };
+  }).sort((a, b) => b.s - a.s);
+}
+
+/* ---------- Montagem da ficha ---------- */
+const EQUIP = { academia: ["academia", "halteres", "nenhum"], halteres: ["halteres", "nenhum"], casa: ["nenhum"] };
+const PESO_CORPORAL_OK = ["core", "cardio", "mobilidade", "panturrilha"];
+function candidatosDaVaga(grupo, filtro, r) {
+  const permitido = EQUIP[r.local] || EQUIP.casa;
+  const lim = r.limitacoes || [];
+  let lista = EXERCICIOS.filter((e) => e.grupo === grupo && permitido.includes(e.equip) && !e.evitar.some((l) => lim.includes(l)));
+  if (r.local !== "casa" && !PESO_CORPORAL_OK.includes(grupo)) {
+    const comCarga = lista.filter((e) => e.equip !== "nenhum");
+    if (comCarga.length >= 2) lista = comCarga;
+  }
+  const filtrar = (l) => filtro === "C" ? l.filter((e) => e.cat === "C") : filtro === "I" ? l.filter((e) => e.cat === "I")
+    : filtro === "S" ? l.filter((e) => e.cat === "I" && !e.post) : filtro === "G" ? l.filter((e) => e.gluteo) : filtro === "P" ? l.filter((e) => e.post) : filtro === "L" ? l.filter((e) => e.leve) : l;
+  const f = filtrar(lista);
+  return f.length ? f : lista;
+}
+function prescrever(ex, filtro, r, circuito) {
+  const nivel = r.nivel || "iniciante";
+  if (circuito) {
+    const trab = { iniciante: 30, intermediario: 40, avancado: 45 }[nivel];
+    const pausa = { iniciante: 30, intermediario: 20, avancado: 15 }[nivel];
+    return { series: 1, alvo: `${trab}s de trabalho`, descanso: pausa, texto: `${trab}s ativo · ${pausa}s pausa`, execSeg: trab };
+  }
+  if (ex.grupo === "mobilidade") return { series: 2, alvo: ex.tempo ? "40 s" : "8–10 reps", descanso: 15, texto: `2 × ${ex.tempo ? "40 s" : "8–10 reps"} · sem pressa`, execSeg: 40 };
+  if (ex.grupo === "cardio" && filtro === "L") return { series: 1, alvo: "8–10 min", descanso: 0, texto: "8–10 min em ritmo leve", execSeg: 540 };
+  const composto = ex.cat === "C";
+  const tab = {
+    hipertrofia: composto ? ["8–12", 90, 4] : ["10–15", 60, 3],
+    forca: composto ? [nivel === "iniciante" ? "6–8" : "4–6", nivel === "iniciante" ? 120 : 150, 4] : ["8–10", 90, 3],
+    emagrecer: composto ? ["10–12", 60, 3] : ["12–15", 45, 3],
+    condicionamento: composto ? ["12–15", 45, 3] : ["15–20", 30, 3],
+    saude: composto ? ["10–12", 75, 3] : ["12–15", 60, 2],
+  }[r.objetivo] || ["10–12", 60, 3];
+  let [reps, descanso, series] = tab;
+  if (nivel === "iniciante") series = Math.max(2, series - 1);
+  if (nivel === "avancado" && composto) series = Math.min(5, series + 1);
+  if (r.energia === "baixa") { series = Math.max(2, series - 1); descanso += 15; }
+  let alvo = `${reps} reps`, execSeg = 40;
+  if (ex.tempo) {
+    const s = { iniciante: 30, intermediario: 40, avancado: 45 }[nivel] - (r.energia === "baixa" ? 5 : 0);
+    alvo = ex.grupo === "cardio" ? `${s + 15} s` : `${s} s`;
+    execSeg = s + (ex.grupo === "cardio" ? 15 : 0);
+    descanso = Math.min(descanso, 45);
+  }
+  if (ex.grupo === "core" && !ex.tempo) alvo = "12–15 reps";
+  return { series, alvo, descanso, texto: `${series} × ${alvo} · ${descanso}s descanso`, execSeg };
+}
+function duracaoItem(it) { return it.series * (it.execSeg + it.descanso); }
+
+function montarFicha() {
+  ui.tela = "gerando"; render(); topo();
+  setTimeout(() => { ui.ficha = construirFicha(); ui.feitos = {}; ui.descanso = null; ui.tela = "ficha"; render(); topo(); }, 650);
+}
+function construirFicha(tipoEscolhido) {
+  const r = ui.r;
+  const ranking = pontuarTipos(r);
+  let tipo = tipoEscolhido || ui.tipoForcado;
+  if (!tipo) {
+    const livre = ranking.find((x) => !ui.vistos.includes(x.id));
+    tipo = (livre || ranking[0]).id;
+  }
+  const t = TIPOS[tipo];
+  const ultimo = memoria.historico.length ? memoria.historico[memoria.historico.length - 1] : null;
+  const evitarRepetir = new Set(ultimo ? ultimo.exercicios : []);
+  const rnd = gerador(hash([hoje(), tipo, r.objetivo, r.nivel, r.local, (r.limitacoes || []).join(), ui.variacao].join("|")));
+  const limiteSeg = (r.tempo >= 75 ? 80 : r.tempo) * 60 - 8 * 60; // menos aquecimento e volta à calma
+  const usados = new Set();
+  const itens = [];
+  let total = 0;
+  for (const [grupo, filtro] of t.vagas) {
+    const cand = embaralhar(candidatosDaVaga(grupo, filtro, r), rnd).sort((a, b) => (evitarRepetir.has(a.id) ? 1 : 0) - (evitarRepetir.has(b.id) ? 1 : 0));
+    const opcoes = cand.filter((e) => !usados.has(e.id)).map((e) => e.id);
+    if (!opcoes.length) continue;
+    const ex = POR_ID[opcoes[0]];
+    const pr = prescrever(ex, filtro, r, t.circuito);
+    const it = { grupo, filtro, opcoes, pos: 0, ex, ...pr };
+    const dur = t.circuito ? 0 : duracaoItem(it);
+    if (!t.circuito && itens.length >= 3 && total + dur > limiteSeg) break;
+    usados.add(ex.id); itens.push(it); total += dur;
+  }
+  let voltas = 0;
+  if (t.circuito) {
+    const porVolta = itens.reduce((a, it) => a + it.execSeg + it.descanso, 0) + 60;
+    voltas = Math.max(2, Math.min(5, Math.floor(limiteSeg / porVolta)));
+    total = voltas * porVolta;
+  }
+  // Técnica avançada no último isolado, para quem já tem estrada
+  if (r.objetivo === "hipertrofia" && r.nivel === "avancado" && r.energia !== "baixa") {
+    const iso = [...itens].reverse().find((it) => it.ex.cat === "I" && !it.ex.tempo);
+    if (iso) iso.tecnica = "Última série em drop-set: reduza a carga em 20–30% e continue sem pausa.";
+  }
+  // Finalizador de cardio para quem quer gastar mais
+  let finalizador = null;
+  const sobra = limiteSeg - total;
+  if (!t.circuito && tipo !== "recuperacao" && ["emagrecer", "condicionamento"].includes(r.objetivo) && sobra >= 6 * 60) {
+    const c = candidatosDaVaga("cardio", "*", r).filter((e) => !usados.has(e.id));
+    if (c.length) {
+      const e = embaralhar(c, rnd)[0];
+      const min = Math.min(10, Math.floor(sobra / 60));
+      finalizador = `${e.nome}: ${min} min intervalados, 30 s forte e 30 s leve.`;
+      total += min * 60;
+    }
+  }
+  const minutos = Math.round(total / 60) + 8;
+  return { tipo, t, itens, voltas, finalizador, minutos, porque: explicar(tipo, r, ranking), ranking, data: hoje() };
+}
+function explicar(tipo, r, ranking) {
+  const t = TIPOS[tipo], out = [];
+  const recentes = paraInternos(r.recentes || []), semana = paraInternos(r.semanaGrupos || []);
+  const nomesRec = paraPessoa(recentes).map((id) => GRUPOS_PESSOA.find((g) => g[0] === id)[1].toLowerCase());
+  if (nomesRec.length) out.push(`Você treinou ${juntar(nomesRec)} nos últimos 2 dias. Esses músculos descansam hoje.`);
+  const novos = t.grupos.filter((g) => !recentes.includes(g) && !semana.includes(g)).map((g) => GRUPOS[g].nome.toLowerCase());
+  if (novos.length && tipo !== "corpo" && tipo !== "condicionamento") out.push(`${capital(juntar(novos))} ainda não ${novos.length > 1 ? "foram treinados" : "foi treinado"} nesta semana.`);
+  if (tipo === "recuperacao") out.push(r.energia === "baixa" ? "Energia baixa: hoje o foco é recuperar e voltar mais forte amanhã." : "Semana cheia: um dia de recuperação ativa protege suas articulações.");
+  if (tipo === "condicionamento") out.push("Circuito em estações: alto gasto calórico em pouco tempo.");
+  if (r.energia === "baixa" && tipo !== "recuperacao") out.push("Energia baixa: menos séries e um pouco mais de descanso.");
+  if (r.energia === "alta" && tipo !== "recuperacao") out.push("Energia alta: volume completo hoje.");
+  out.push(`Séries, repetições e descanso pensados para ${OBJETIVOS[r.objetivo]}, nível ${NIVEIS[r.nivel].toLowerCase()}.`);
+  if ((r.limitacoes || []).length) out.push(`Deixamos de fora exercícios que forçam ${juntar(r.limitacoes.map((l) => LIMITES[l]))}.`);
+  return out;
+}
+const juntar = (l) => (l.length <= 1 ? l.join("") : l.slice(0, -1).join(", ") + " e " + l[l.length - 1]);
+const capital = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+function aquecimento(f) {
+  const r = ui.r, academia = r.local === "academia";
+  const leve = academia ? "5 min de bike ou elíptico leve" : "3 min de marcha no lugar";
+  if (f.tipo === "recuperacao") return "3 min de caminhada leve, respirando pelo nariz.";
+  if (f.t.parte === "sup") return `${leve}, 15 rotações de ombro para cada lado e 1 série leve do primeiro exercício.`;
+  if (f.t.parte === "inf") return `${leve}, 10 agachamentos sem peso, 10 pontes de glúteo e mobilidade de tornozelo.`;
+  return `${leve}, 10 agachamentos sem peso, 10 rotações de braço e 20 s de prancha.`;
+}
+const VOLTA = "Alongue os músculos trabalhados por 30 s cada e respire fundo por 1 minuto.";
+
+/* ---------- Renderização ---------- */
+const raiz = document.getElementById("raiz");
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+function topo() { window.scrollTo(0, 0); }
+function anilha(cor, kg, tam) {
+  return `<svg class="anilha" width="${tam}" height="${tam}" viewBox="0 0 100 100" aria-hidden="true">
+    <circle cx="50" cy="50" r="48" fill="${cor}"/><circle cx="50" cy="50" r="41" fill="none" stroke="#0D0E10" stroke-opacity=".22" stroke-width="2"/>
+    <circle cx="50" cy="50" r="17" fill="${cor}" stroke="#0D0E10" stroke-opacity=".3" stroke-width="2"/><circle cx="50" cy="50" r="7.5" fill="#0D0E10"/>
+    <text x="50" y="29" text-anchor="middle" font-family="Impact, sans-serif" font-weight="900" font-size="17" fill="#0D0E10" fill-opacity=".75">${kg}</text></svg>`;
+}
+function cabecalho() {
+  const d = new Date();
+  return `<header class="topo"><div class="marca"><span class="marca-sinal">${ic("halter")}</span>Ficha do Dia</div>
+    <span class="data">${DIAS[d.getDay()].slice(0, 3)} ${pad(d.getDate())} ${MESES[d.getMonth()]}</span></header>`;
+}
+function telaInicio() {
+  const p = memoria.perfil, semana = historicoDaSemana();
+  const placas = [["#E5383B", "25"], ["#2F80ED", "20"], ["#F2C230", "15"], ["#2FBF71", "10"], ["#E9E7E1", "5"]];
+  const ultimo = memoria.historico[memoria.historico.length - 1];
+  return `${cabecalho()}
+  <div class="abertura">
+    <div class="anilhas">${placas.map(([c, k], i) => anilha(c, k, 70 - i * 8)).join("")}</div>
+    <h1 class="display abertura-titulo">${p && p.nome ? `Bora, ${esc(p.nome.split(/\s+/)[0])}.<br><em>Qual é o treino</em><br>de hoje?` : `Sem ideia<br>do que treinar<br><em>hoje?</em>`}</h1>
+    <p class="suave" style="max-width:44ch">Responda algumas perguntas rápidas e receba uma ficha montada para o seu dia, sem repetir o que você já treinou na semana. Amanhã, outra ficha.</p>
+    ${p ? `<div class="resumo-semana">${ic("historico")}<div style="min-width:0"><strong>${semana.length ? `${semana.length} ${semana.length === 1 ? "treino registrado" : "treinos registrados"} nesta semana` : "Nenhum treino registrado nesta semana"}</strong>
+        <div class="pequeno">${ultimo ? `Último: ${TIPOS[ultimo.tipo].nome} em ${formatarData(ultimo.data)}` : "Conclua uma ficha para começar seu histórico."}</div></div></div>`
+      : `<div class="passos-lista">
+        <div class="passo-item"><span class="passo-num">1</span><div><strong>Seu perfil</strong><div class="pequeno">Experiência, objetivo, local e cuidados. Só na primeira vez.</div></div></div>
+        <div class="passo-item"><span class="passo-num">2</span><div><strong>Seu dia</strong><div class="pequeno">Tempo, energia e o que você já treinou.</div></div></div>
+        <div class="passo-item"><span class="passo-num">3</span><div><strong>Sua ficha</strong><div class="pequeno">Exercícios, séries, descanso e cronômetro.</div></div></div>
+      </div>`}
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:auto">
+      ${p ? `<button class="btn btn-primario btn-bloco" data-a="dia">${ic("seta")}Montar a ficha de hoje</button>
+             <button class="btn btn-fantasma" data-a="perfil">${ic("editar")}Atualizar meu perfil</button>`
+          : `<button class="btn btn-primario btn-bloco" data-a="perfil">${ic("seta")}Começar · leva 1 minuto</button>`}
+      <p class="aviso">Orientação geral de treino. Não substitui avaliação médica nem acompanhamento de um profissional de educação física.</p>
+    </div>
+  </div>`;
+}
+function formatarData(k) {
+  const h = hoje();
+  if (k === h) return "hoje";
+  if (k === somar(h, -1)) return "ontem";
+  const d = deChave(k);
+  return `${DIAS[d.getDay()]}, ${pad(d.getDate())}/${pad(d.getMonth() + 1)}`;
+}
+function telaPergunta() {
+  const campo = ui.fila[ui.idx], q = PERGUNTAS[campo], v = ui.r[campo];
+  const total = ui.fila.length;
+  let corpo = "";
+  if (q.tipo === "texto") {
+    corpo = `<div class="entrada"><input id="campo-${campo}" data-campo="${campo}" value="${esc(v || "")}" autocomplete="given-name" autocapitalize="words" enterkeyhint="next" placeholder="Seu nome" aria-label="${q.titulo}"></div>`;
+  } else if (q.tipo === "grade") {
+    corpo = `<div class="grade-opcoes">${q.opcoes.map(([id, t, s]) => `<button class="opcao" aria-pressed="${v === id}" data-a="unica" data-v="${id}" data-n="1"><span class="num">${t}</span><span class="pequeno">${s}</span></button>`).join("")}</div>`;
+  } else if (q.tipo === "unica") {
+    corpo = `<div class="opcoes">${q.opcoes.map(([id, t, s]) => `<button class="opcao" aria-pressed="${v === id}" data-a="unica" data-v="${id}">
+      <span class="opcao-marca">${ic("check")}</span><span style="min-width:0"><span class="opcao-titulo">${t}</span>${s ? `<span class="pequeno">${s}</span>` : ""}</span></button>`).join("")}</div>`;
+  } else {
+    const lista = v || [];
+    const nada = !lista.length && (ui.r[campo + "_nada"] || ui.prefill[campo]);
+    corpo = `<div class="opcoes">${q.opcoes.map(([id, t, s, cor]) => `<button class="opcao multi" aria-pressed="${lista.includes(id)}" data-a="multi" data-v="${id}">
+        <span class="opcao-marca">${ic("check")}</span>${cor ? `<span class="grupo-cor" style="background:${cor}"></span>` : ""}<span style="min-width:0"><span class="opcao-titulo">${t}</span>${s ? `<span class="pequeno">${s}</span>` : ""}</span></button>`).join("")}
+      <button class="opcao multi" aria-pressed="${!!nada}" data-a="nada"><span class="opcao-marca">${ic("check")}</span><span class="opcao-titulo">${q.nenhum}</span></button></div>`;
+  }
+  const notaHist = ui.prefill[campo] ? `<div class="nota-historico">${ic("historico")}<span>Preenchido com o histórico deste aparelho. Confira e ajuste se precisar.</span></div>` : "";
+  const subEnfase = campo === "enfase" && ui.r.genero ? q.sub : q.sub;
+  const mostrarContinuar = q.tipo === "texto" || q.tipo === "multi" || (respondida(campo) && ui.prefill[campo]);
+  return `<div class="progresso">
+      <button class="btn-icone" data-a="voltar" aria-label="Voltar">${ic("voltar")}</button>
+      <div class="barra"><span style="width:${Math.round(((ui.idx + 1) / (total + 1)) * 100)}%"></span></div>
+      <span class="rotulo">${ui.idx + 1}/${total}</span>
+    </div>
+    <section class="pergunta" aria-live="polite">
+      <span class="rotulo">${PERFIL_CAMPOS.includes(campo) ? "Seu perfil" : "Seu dia"}</span>
+      <h1 class="display pergunta-titulo">${q.titulo}</h1>
+      <p class="suave" style="margin-top:-8px">${subEnfase}</p>
+      ${notaHist}
+      ${corpo}
+    </section>
+    ${mostrarContinuar ? `<div class="rodape"><button class="btn btn-primario btn-bloco" id="continuar" data-a="continuar" ${respondida(campo) || q.tipo === "texto" ? "" : "disabled"}>
+      ${q.tipo === "texto" && !(v || "").trim() ? "Pular" : "Continuar"}${ic("seta")}</button></div>` : ""}`;
+}
+function telaGerando() {
+  return `${cabecalho()}<div class="gerando"><div style="display:flex;flex-direction:column;align-items:center;gap:18px">
+    ${anilha("#FF5B22", "", 96)}<div><h2 class="display" style="font-size:34px">Montando sua ficha</h2><p class="suave">Cruzando seu perfil com a sua semana…</p></div></div></div>`;
+}
+function telaFicha() {
+  const f = ui.ficha, r = ui.r;
+  const nome = r.nome ? esc(r.nome.split(/\s+/)[0]) : "";
+  const totalSeries = f.itens.reduce((a, it) => a + (f.t.circuito ? f.voltas : it.series), 0);
+  const feitas = Object.values(ui.feitos).reduce((a, l) => a + l.filter(Boolean).length, 0);
+  const tags = [...new Set(f.itens.map((it) => it.ex.grupo))].map((g) => `<span class="tag"><span class="grupo-cor" style="background:${GRUPOS[g].cor};width:8px;height:8px;border-radius:2px"></span>${GRUPOS[g].nome}</span>`).join("");
+  const lista = f.itens.map((it, i) => {
+    const n = f.t.circuito ? f.voltas : it.series;
+    const marc = ui.feitos[i] || [];
+    const completo = marc.filter(Boolean).length >= n;
+    const series = Array.from({ length: n }, (_, j) => `<button class="serie" aria-pressed="${!!marc[j]}" data-a="serie" data-i="${i}" data-j="${j}" aria-label="${f.t.circuito ? "Volta" : "Série"} ${j + 1}">${marc[j] ? ic("check") : j + 1}</button>`).join("");
+    const grande = !!ui.zoom[i];
+    return `<div class="ex ${completo ? "feito" : ""} ${grande ? "grande" : ""}">
+      <button class="ilu-caixa" data-a="zoom" data-i="${i}" aria-label="${grande ? "Reduzir" : "Ampliar"} a ilustração de ${it.ex.nome}">
+        ${ILU.svg(it.ex.id)}<span class="ex-num">${pad(i + 1)}</span><span class="ilu-lupa">${ic(grande ? "reduzir" : "ampliar")}</span>
+      </button>
+      <div class="ex-info">
+        <span class="ex-nome">${it.ex.nome}</span>
+        <span class="prescricao">${it.texto}</span>
+        ${ILU.legenda(it.ex.id) ? `<span class="legenda">${ic("equipamento")}<span>${ILU.legenda(it.ex.id)}</span></span>` : ""}
+      </div>
+      <div class="ex-corpo">
+        <span class="pequeno">${it.ex.dica}</span>
+        ${it.tecnica ? `<span class="tecnica">${it.tecnica}</span>` : ""}
+        <div class="series" role="group" aria-label="Marque ${f.t.circuito ? "as voltas" : "as séries"}">${series}</div>
+        <div class="ex-acoes">
+          ${it.opcoes.length > 1 ? `<button class="link" data-a="trocar" data-i="${i}">${ic("trocar")}Trocar exercício</button>` : ""}
+          ${it.descanso ? `<button class="link" data-a="descansar" data-i="${i}">${ic("timer")}Descanso ${it.descanso}s</button>` : ""}
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+  const focos = f.ranking.map((x) => `<button class="foco" aria-pressed="${x.id === f.tipo}" data-a="foco" data-t="${x.id}">${TIPOS[x.id].nome}${x.recuperando ? ' <span class="recup">· em recuperação</span>' : ""}</button>`).join("");
+  const concluida = memoria.historico.some((x) => x.data === hoje() && x.tipo === f.tipo && x.variacao === ui.variacao);
+  return `${cabecalho()}
+  <section class="ficha-cab">
+    <span class="rotulo">${nome ? `Ficha de ${nome} · ` : ""}${formatarData(hoje())}</span>
+    <h1 class="display ficha-titulo">${f.t.nome}</h1>
+    <span class="suave">${f.t.sub}</span>
+    <div class="metricas">
+      <div class="metrica"><span class="rotulo">Tempo</span><span class="num">~${f.minutos}<span class="pequeno"> min</span></span></div>
+      <div class="metrica"><span class="rotulo">${f.t.circuito ? "Estações" : "Exercícios"}</span><span class="num">${f.itens.length}</span></div>
+      <div class="metrica"><span class="rotulo">${f.t.circuito ? "Voltas" : "Séries"}</span><span class="num">${f.t.circuito ? f.voltas : totalSeries}</span></div>
+    </div>
+    <div class="tags">${tags}</div>
+  </section>
+
+  <section class="cartao porque">
+    <span class="rotulo">Por que esta ficha</span>
+    <ul>${f.porque.map((x) => `<li>${x}</li>`).join("")}</ul>
+  </section>
+
+  <div class="bloco">${ic("chama")}<span><strong>Aquecimento:</strong> ${aquecimento(f)}</span></div>
+  ${f.t.circuito ? `<div class="bloco">${ic("info")}<span><strong>Como fazer:</strong> passe por todas as estações em sequência. Ao fim de cada volta, descanse 1 minuto. Faça ${f.voltas} voltas.</span></div>` : ""}
+
+  <section class="cartao" style="gap:0">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:10px">
+      <span class="rotulo">${f.t.circuito ? "Estações" : "Exercícios"}</span>
+      <span class="pequeno"><span class="num" style="font-size:16px;color:var(--giz)">${feitas}</span>/${totalSeries} ${f.t.circuito ? "voltas" : "séries"} feitas</span>
+    </div>
+    <div class="barra" style="margin-bottom:6px"><span style="width:${totalSeries ? Math.round((feitas / totalSeries) * 100) : 0}%"></span></div>
+    <div class="lista">${lista}</div>
+  </section>
+
+  ${f.finalizador ? `<div class="bloco">${ic("chama")}<span><strong>Finalizador:</strong> ${f.finalizador}</span></div>` : ""}
+  <div class="bloco">${ic("vento")}<span><strong>Volta à calma:</strong> ${VOLTA}</span></div>
+  <div class="bloco">${ic("info")}<span>${f.tipo === "recuperacao" || f.t.circuito ? "Mantenha um ritmo em que consiga respirar com controle." : "Escolha uma carga em que as últimas repetições sejam difíceis, mas ainda com boa técnica. Desça o peso em 2 a 3 segundos."}</span></div>
+
+  <button class="btn btn-primario btn-bloco" data-a="concluir" ${concluida ? "disabled" : ""}>${ic("bandeira")}${concluida ? "Treino salvo no histórico" : "Concluí este treino"}</button>
+  <div class="acoes-2">
+    <button class="btn btn-secundario" data-a="outra">${ic("nova")}Outra ficha</button>
+    <button class="btn btn-secundario" data-a="copiar">${ic("copiar")}Copiar ficha</button>
+  </div>
+
+  <section style="display:flex;flex-direction:column;gap:10px">
+    <span class="rotulo">Prefere outro foco hoje?</span>
+    <div class="focos">${focos}</div>
+  </section>
+
+  <button class="btn btn-fantasma" data-a="refazer">${ic("voltar")}Refazer as perguntas</button>
+  <p class="aviso">Sentiu dor aguda, tontura ou falta de ar? Pare e procure orientação. Esta ficha é uma sugestão geral e não substitui um profissional.</p>
+  <div style="height:${ui.descanso ? 96 : 0}px"></div>
+  ${barraDescanso()}`;
+}
+function barraDescanso() {
+  if (!ui.descanso) return "";
+  return `<div class="descanso" id="descanso"><div>
+      ${ic("timer")}<span class="num" id="descanso-num">0:00</span><span class="pequeno" style="flex:1">Descanso</span>
+      <button class="btn-icone" data-a="mais15" aria-label="Mais 15 segundos" style="width:auto;padding:0 12px;font-weight:700">+15s</button>
+      <button class="btn-icone" data-a="pularDescanso" aria-label="Pular descanso">${ic("pular")}</button>
+    </div><div class="descanso-barra"><span id="descanso-barra"></span></div></div>`;
+}
+function render() {
+  raiz.innerHTML = ui.tela === "pergunta" ? telaPergunta() : ui.tela === "gerando" ? telaGerando() : ui.tela === "ficha" ? telaFicha() : telaInicio();
+  if (ui.tela === "pergunta" && PERGUNTAS[ui.fila[ui.idx]].tipo === "texto") {
+    const el = raiz.querySelector("input");
+    if (el && window.matchMedia("(pointer: fine)").matches) el.focus();
+  }
+  rodarDescanso();
+  if (ui.tela === "ficha" && typeof ILU !== "undefined") ILU.animar(raiz);
+}
+
+/* ---------- Descanso ---------- */
+let tique = null;
+function rodarDescanso() {
+  clearInterval(tique);
+  if (!ui.descanso) return;
+  const passo = () => {
+    const d = ui.descanso;
+    if (!d) return clearInterval(tique);
+    const resta = Math.ceil((d.fim - Date.now()) / 1000);
+    if (resta <= 0) {
+      ui.descanso = null; clearInterval(tique);
+      try { navigator.vibrate && navigator.vibrate([200, 80, 200]); } catch (e) { /* sem vibração */ }
+      avisar("Descanso encerrado. Próxima série!", "timer");
+      const el = document.getElementById("descanso"); if (el) el.remove();
+      return;
+    }
+    const n = document.getElementById("descanso-num"), b = document.getElementById("descanso-barra");
+    if (n) n.textContent = `${Math.floor(resta / 60)}:${pad(resta % 60)}`;
+    if (b) b.style.width = `${Math.max(0, Math.min(100, (resta / d.total) * 100))}%`;
+  };
+  passo();
+  tique = setInterval(passo, 250);
+}
+function iniciarDescanso(seg) { if (!seg) return; ui.descanso = { fim: Date.now() + seg * 1000, total: seg }; }
+
+let timerToast = null;
+function avisar(texto, icone = "brilho") {
+  const t = document.getElementById("toast");
+  t.innerHTML = `${ic(icone)}<span>${esc(texto)}</span>`;
+  t.classList.add("visivel");
+  clearTimeout(timerToast);
+  timerToast = setTimeout(() => t.classList.remove("visivel"), 2600);
+}
+
+/* ---------- Texto para copiar e mandar no WhatsApp ---------- */
+function textoFicha() {
+  const f = ui.ficha, r = ui.r, d = new Date();
+  const linhas = [`*FICHA DO DIA · ${pad(d.getDate())}/${pad(d.getMonth() + 1)}*${r.nome ? ` · ${r.nome.trim()}` : ""}`, `*${f.t.nome.toUpperCase()}* (${f.t.sub.replace(/ · /g, ", ")}) · ~${f.minutos} min`, "", `Aquecimento: ${aquecimento(f)}`];
+  if (f.t.circuito) linhas.push(`Circuito: ${f.voltas} voltas, 1 min de descanso entre elas.`);
+  linhas.push("");
+  f.itens.forEach((it, i) => linhas.push(`${i + 1}. ${it.ex.nome}: ${it.texto}${it.tecnica ? ` (${it.tecnica})` : ""}`));
+  if (f.finalizador) linhas.push("", `Finalizador: ${f.finalizador}`);
+  linhas.push("", `Volta à calma: ${VOLTA}`, "", "_Gerado pela Ficha do Dia · Jornada Fit_");
+  return linhas.join("\n");
+}
+async function copiar(texto) {
+  try { await navigator.clipboard.writeText(texto); return true; } catch (e) {
+    const ta = document.createElement("textarea");
+    ta.value = texto; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select();
+    let ok = false; try { ok = document.execCommand("copy"); } catch (e2) { ok = false; }
+    ta.remove(); return ok;
+  }
+}
+
+/* ---------- Ações ---------- */
+const acoes = {
+  perfil() { iniciarPerguntas(false); },
+  dia() { iniciarPerguntas(true); },
+  voltar() {
+    if (ui.idx === 0) { ui.tela = "inicio"; render(); return topo(); }
+    ui.idx--;
+    while (ui.fila[ui.idx] === "semanaGrupos" && ui.r.semana === 0 && ui.idx > 0) ui.idx--;
+    render(); topo();
+  },
+  unica(ds) {
+    const campo = ui.fila[ui.idx];
+    ui.r[campo] = ds.n ? Number(ds.v) : ds.v;
+    if (campo === "genero" && !ui.r._enfaseEscolhida) ui.r.enfase = ds.v === "feminino" ? "inferiores" : "equilibrado";
+    if (campo === "enfase") ui.r._enfaseEscolhida = true;
+    delete ui.prefill[campo];
+    render();
+    setTimeout(avancar, 170);
+  },
+  multi(ds) {
+    const campo = ui.fila[ui.idx], l = ui.r[campo] || [];
+    ui.r[campo] = l.includes(ds.v) ? l.filter((x) => x !== ds.v) : [...l, ds.v];
+    ui.r[campo + "_nada"] = false; delete ui.prefill[campo];
+    render();
+  },
+  nada() {
+    const campo = ui.fila[ui.idx];
+    ui.r[campo] = []; ui.r[campo + "_nada"] = true; delete ui.prefill[campo];
+    render();
+  },
+  continuar() {
+    const campo = ui.fila[ui.idx];
+    if (campo === "nome") ui.r.nome = (ui.r.nome || "").trim();
+    if (PERGUNTAS[campo].tipo === "multi" && ui.prefill[campo]) ui.r[campo + "_nada"] = !(ui.r[campo] || []).length;
+    avancar();
+  },
+  serie(ds) {
+    const i = Number(ds.i), j = Number(ds.j), l = ui.feitos[i] || [];
+    l[j] = !l[j]; ui.feitos[i] = l;
+    const it = ui.ficha.itens[i];
+    if (l[j] && it.descanso && !ui.ficha.t.circuito) iniciarDescanso(it.descanso);
+    const y = window.scrollY; render(); window.scrollTo(0, y);
+  },
+  zoom(ds) { const i = Number(ds.i); ui.zoom[i] = !ui.zoom[i]; const y = window.scrollY; render(); window.scrollTo(0, y); },
+  descansar(ds) { iniciarDescanso(ui.ficha.itens[Number(ds.i)].descanso); const y = window.scrollY; render(); window.scrollTo(0, y); },
+  mais15() { if (ui.descanso) { ui.descanso.fim += 15000; ui.descanso.total += 15; } },
+  pularDescanso() { ui.descanso = null; const y = window.scrollY; render(); window.scrollTo(0, y); },
+  trocar(ds) {
+    const i = Number(ds.i), f = ui.ficha, it = f.itens[i];
+    const emUso = new Set(f.itens.map((x) => x.ex.id));
+    for (let k = 1; k <= it.opcoes.length; k++) {
+      const pos = (it.pos + k) % it.opcoes.length, id = it.opcoes[pos];
+      if (!emUso.has(id) || id === it.ex.id) {
+        it.pos = pos; it.ex = POR_ID[id];
+        Object.assign(it, prescrever(it.ex, it.filtro, ui.r, f.t.circuito));
+        delete it.tecnica; break;
+      }
+    }
+    ui.feitos[i] = [];
+    const y = window.scrollY; render(); window.scrollTo(0, y);
+    avisar(`Trocado por: ${it.ex.nome}`, "trocar");
+  },
+  outra() {
+    ui.vistos.push(ui.ficha.tipo); ui.variacao++; ui.tipoForcado = null;
+    if (ui.vistos.length >= Object.keys(TIPOS).length) ui.vistos = [ui.ficha.tipo];
+    ui.ficha = construirFicha(); ui.feitos = {}; ui.zoom = {}; ui.descanso = null; render(); topo();
+    avisar(`Nova ficha: ${ui.ficha.t.nome}`, "nova");
+  },
+  foco(ds) {
+    ui.tipoForcado = ds.t; ui.variacao++;
+    ui.ficha = construirFicha(ds.t); ui.feitos = {}; ui.descanso = null; render(); topo();
+  },
+  concluir() {
+    const f = ui.ficha;
+    const perfil = Object.fromEntries(PERFIL_CAMPOS.map((c) => [c, ui.r[c]]));
+    perfil._enfaseEscolhida = ui.r._enfaseEscolhida;
+    memoria.perfil = perfil;
+    memoria.historico = memoria.historico.filter((x) => x.data !== hoje());
+    const grupos = f.tipo === "corpo" ? ["quadriceps", "peito", "costas", "posterior", "ombros"] : [...new Set([...f.t.grupos, ...f.itens.map((it) => it.ex.grupo)])].filter((g) => g !== "mobilidade");
+    memoria.historico.push({ data: hoje(), tipo: f.tipo, variacao: ui.variacao, grupos, exercicios: f.itens.map((it) => it.ex.id) });
+    memoria.historico = memoria.historico.slice(-60);
+    guardar();
+    ui.descanso = null;
+    const y = window.scrollY; render(); window.scrollTo(0, y);
+    avisar("Treino salvo. A próxima ficha vai levar isso em conta.", "bandeira");
+  },
+  async copiar() {
+    const texto = textoFicha();
+    if (navigator.share && window.matchMedia("(pointer: coarse)").matches) {
+      try { await navigator.share({ title: "Ficha do Dia", text: texto }); return; } catch (e) { if (e && e.name === "AbortError") return; }
+    }
+    avisar((await copiar(texto)) ? "Ficha copiada. É só colar no WhatsApp." : "Não deu para copiar neste aparelho.", "copiar");
+  },
+  refazer() { iniciarPerguntas(!!memoria.perfil); },
+};
+
+document.addEventListener("click", (ev) => {
+  const el = ev.target.closest("[data-a]");
+  if (!el || el.disabled) return;
+  const fn = acoes[el.dataset.a];
+  if (fn) fn(el.dataset, el, ev);
+});
+document.addEventListener("input", (ev) => {
+  const el = ev.target;
+  if (ui.tela !== "pergunta" || !el.dataset || !el.dataset.campo) return;
+  ui.r[el.dataset.campo] = el.value;
+  const b = document.getElementById("continuar");
+  if (b) b.innerHTML = `${el.value.trim() ? "Continuar" : "Pular"}${ic("seta")}`;
+});
+document.addEventListener("keydown", (ev) => {
+  if (ev.key === "Enter" && ev.target.tagName === "INPUT") { ev.preventDefault(); const b = document.getElementById("continuar"); if (b) b.click(); }
+});
+
+// Se já existe perfil salvo, salva também quando a pessoa só atualiza o perfil sem concluir treino
+window.addEventListener("pagehide", () => {
+  if (ui.tela === "ficha" && ui.r.nivel) {
+    const perfil = Object.fromEntries(PERFIL_CAMPOS.map((c) => [c, ui.r[c]]));
+    perfil._enfaseEscolhida = ui.r._enfaseEscolhida;
+    memoria.perfil = perfil; guardar();
+  }
+});
+
+render();
+</script>
+</body>
+</html>
